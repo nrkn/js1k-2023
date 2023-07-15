@@ -30,7 +30,7 @@
     //
     // stat related
     const $ = '💰'
-    const weapon = '🗡️'
+    //const weapon = '🗡️'
     const shield = '🛡️'
     const rogue = '🍀'
     const fighter = '💪'
@@ -230,7 +230,7 @@
         // weapon shop
         // can buy if not max and if have money
         appendButton(
-          weapon + $ + (
+          attack + $ + (
             pweapon == 5 || p$ < scaling[pweapon + 1] ?
               nope :
               scaling[pweapon + 1]
@@ -462,19 +462,19 @@
         // todo: calc and display result of this battle round
         if ((patk + die0) == (fatk + die1)) {
           // no hit      
-          a.append(shield, nl)
+          // a.append(shield, nl)
         }
         else if ((patk + die0) > (fatk + die1)) {
           // player hit monster          
           fhp = fhp - (2 + pweapon)
 
-          a.append(fclass + health + -(2 + pweapon), nl)
+          // a.append(fclass + health + -(2 + pweapon), nl)
         }
         else {
           // monster hit    
           php = php - fdmg
 
-          a.append(pclass + health + -fdmg, nl)
+          // a.append(pclass + health + -fdmg, nl)
         }
 
         // display monster
@@ -490,7 +490,7 @@
           pexp = pexp + fexp
 
           // enemy died
-          a.append(fclass + dead + $ + f$ + level + fexp, nl)
+          a.append( $ + f$ + level + fexp, nl)
 
           if (fclass == dragon) {
             // exit to win
@@ -515,10 +515,11 @@
 
           appendButton(
             forest + (
-              (pclass == fighter || (pclass == magic && die2 < 4)) ? nope : pclass
+              // if not rogue 50%/50%
+              (pclass != rogue || die2 < 4) ? nope : pclass
             ),
             () => {
-              if (!(pclass == fighter || (pclass == magic && die2 < 4))) {
+              if (!(pclass != rogue || die2 < 4)) {
                 fclass = 0
                 tick(forest)
               }
