@@ -480,15 +480,9 @@
         }
         else {
           // monster hit    
-          if ((fdmg - pshield) <= 0) {
-            // no hit      
-            a.append(shield, nl)
-          }
-          else {
-            php = php - (fdmg - pshield)
+          php = php - fdmg
 
-            a.append(pclass + health + -(fdmg - pshield), nl)
-          }
+          a.append(pclass + health + -fdmg, nl)
         }
 
         // display monster
@@ -560,8 +554,6 @@
         $ + p$ + ws +
         attack + patk + ws +
         health + php + ws + phpmax + ws +
-        weapon + pweapon + ws +
-        shield + pshield + ws +
         level + plevel + ws + pexp,
         ws + time,
         pturns = pturns + 1
