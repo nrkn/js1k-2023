@@ -13,8 +13,6 @@ match the costs of the weapons and shields - maybe start player at 0 for ease?
 
 enemies don't scale well, they're too easy, they never have challenging atk
 (though I did max build my player - try with weaker builds)
-you level up way faster than you get money to buy weapons and shields
-you do too much damage - just use 2 + pweapon + ( plevel - 1 ) maybe
 
 ## minifying 
 
