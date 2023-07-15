@@ -147,12 +147,11 @@
 
     const appendButton = (
       label = attack,
-      onclick = () => tick(label),
-      suffix = ws
+      onclick = () => tick(label)
     ) => {
       c = d.createElement('button')
       c.onclick = onclick
-      c.append(label, suffix)
+      c.append(label)
       a.append(c, nl)
     }
 
@@ -167,7 +166,8 @@
       // should always be good
       if (pclass === lucky && die0 == 1) die0 = ((Math.random() * 6) | 0) + 1
       // don't reroll the enemy dice in attacks, jebus! one expecption!
-      if (pclass === lucky && die1 == 1) die1 = plocation == attack ? die1 : ((Math.random() * 6) | 0) + 1
+      // sorry, too spendy, die1 is never lucky lol
+      // if (pclass === lucky && die1 == 1) die1 = plocation == attack ? die1 : ((Math.random() * 6) | 0) + 1
       if (pclass === lucky && die2 == 1) die2 = ((Math.random() * 6) | 0) + 1
 
       a.remove()
@@ -231,7 +231,11 @@
         // weapon shop
         // can buy if not max and if have money
         appendButton(
-          weapon + (pweapon + 1),
+          weapon + (pweapon + 1) + (
+            pweapon == 5 || p$ < scaling[pweapon + 1] ?
+              nope + $ + scaling[pweapon + 1] :
+              $ + scaling[pweapon + 1]
+          ),
           () => {
             if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
               // begin custom shop action
@@ -242,16 +246,17 @@
 
               tick(castle)
             }
-          },
-          (pweapon == 5 || p$ < scaling[pweapon + 1]) ?
-            nope + $ + scaling[pweapon + 1] :
-            $ + scaling[pweapon + 1]
+          }
         )
 
         // shield shop
         // can buy if not max and if have money
         appendButton(
-          shield + (pshield + 1),
+          shield + (pshield + 1) + (
+            pshield == 5 || p$ < scaling[pshield + 1] ?
+              nope + $ + scaling[pshield + 1] :
+              $ + scaling[pshield + 1]
+          ),
           () => {
             if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
               // begin custom shop action
@@ -263,17 +268,14 @@
 
               tick(castle)
             }
-          },
-          pshield == 5 || p$ < scaling[pshield + 1] ?
-            pshield == 5 ?
-              nope + shield :
-              nope + $ + scaling[pshield + 1] :
-            $ + scaling[pshield + 1]
+          }
         )
 
         // healer        
         appendButton(
-          health + 1,
+          health + 1 + (
+            (p$ < 5 || php == phpmax) ? nope : $ + 5
+          ),
           () => {
             if (!(p$ < 5 || php == phpmax)) {
               // begin custom shop action
@@ -283,14 +285,14 @@
 
               tick(castle)
             }
-          },
-          (p$ < 5 || php == phpmax) ? nope : $ + 5
+          }          
         )
 
         // gym
-
         appendButton(
-          level + (plevel + 1),
+          level + (plevel + 1) + (
+            (plevel == 5 || pexp < scaling[plevel + 1]) ? nope + scaling[plevel + 1] : up
+          ),
           () => {
             if (!(plevel == 5 || pexp < scaling[plevel + 1])) {
               // begin custom shop action
@@ -301,8 +303,7 @@
 
               tick(castle)
             }
-          },
-          (plevel == 5 || pexp < scaling[plevel + 1]) ? nope + scaling[plevel + 1] : up
+          }          
         )
 
         // forest
@@ -317,7 +318,9 @@
 
         // look for dragon - locked until plevel == 5
         appendButton(
-          dragon,
+          dragon + (
+            plevel == 5 ? look : nope
+          ),
           () => {
             if (plevel == 5) {
               fclass = dragon
@@ -329,8 +332,7 @@
 
               tick(attack)
             }
-          },
-          plevel == 5 ? look : nope
+          }
         )
 
 
@@ -525,14 +527,15 @@
           appendButton()//short form - see if less bytes
 
           appendButton(
-            forest,
+            forest + (
+              (pclass == fighter || (pclass == magic && die2 < 4)) ? nope : ws
+            ),
             () => {
               if (!(pclass == fighter || (pclass == magic && die2 < 4))) {
                 fclass = 0
                 tick(forest)
               }
-            },
-            (pclass == fighter || (pclass == magic && die2 < 4)) ? nope : ws
+            }
           )
         }
       }
