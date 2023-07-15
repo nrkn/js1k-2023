@@ -92,7 +92,7 @@
     const up = '👆'
     //const gym = '🏋️'
     const dice = '🎲'
-//    const ws = ' '
+    //    const ws = ' '
     const nl = '\n'
     const sep = '/'
 
@@ -165,11 +165,11 @@
       // therefore, 1 or a low value should always be bad, and high values
       // should always be good
       if (pclass === lucky && die0 == 1) die0 = ((Math.random() * 6) | 0) + 1
-      
+
       // don't reroll the enemy dice in attacks, jebus! one expecption!
       // sorry, too spendy, die1 is never lucky lol
       // if (pclass === lucky && die1 == 1) die1 = plocation == attack ? die1 : ((Math.random() * 6) | 0) + 1
-      
+
       // but we can boost die2
       if (pclass === lucky && die2 == 1) die2 = ((Math.random() * 6) | 0) + 1
 
@@ -231,81 +231,65 @@
 
         // weapon shop
         // can buy if not max and if have money
-        appendButton(
-          attack + $ + (
-            pweapon == 5 || p$ < scaling[pweapon + 1] ?
-              nope :
-              scaling[pweapon + 1]
-          ),
-          () => {
-            if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
-              // begin custom shop action
+        if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
+          appendButton(
+            attack + $ + scaling[pweapon + 1],
+            () => {
               p$ = p$ - scaling[pweapon + 1]
               pweapon = pweapon + 1
               patk = patk + 1
-              // end custom shop action
-
               tick(castle)
             }
-          }
-        )
+          )
+        } else {
+          a.append(nope, nl)
+        }
 
         // shield shop
         // can buy if not max and if have money
-        appendButton(
-          shield + $ + (
-            pshield == 5 || p$ < scaling[pshield + 1] ?
-              nope :
-              scaling[pshield + 1]
-          ),
-          () => {
-            if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
-              // begin custom shop action
+        if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
+          appendButton(
+            shield + $ + scaling[pshield + 1],
+            () => {
               p$ = p$ - scaling[pshield + 1]
               pshield = pshield + 1
               phpmax = phpmax + 2
               php = php + 2
-              // end custom shop action
-
               tick(castle)
             }
-          }
-        )
+          )
+        } else {
+          a.append(nope, nl)
+        }
 
         // healer        
-        appendButton(
-          health + $ + (
-            (p$ < 5 || php >= phpmax) ? nope : 5
-          ),
-          () => {
-            if (!(p$ < 5 || php >= phpmax)) {
-              // begin custom shop action
+        if (!(p$ < 5 || php >= phpmax)) {
+          appendButton(
+            health + $ + 5,
+            () => {
               p$ = p$ - 5
               php = php + 1
-              // end custom shop action
-
               tick(castle)
             }
-          }
-        )
+          )
+        } else {
+          a.append(nope, nl)
+        }
 
         // gym
-        appendButton(
-          level + (
-            (plevel == 5 || pexp < scaling[plevel + 1]) ? nope : plevel + 1
-          ),
-          () => {
-            if (!(plevel == 5 || pexp < scaling[plevel + 1])) {
-              // begin custom shop action
+        if (!(plevel == 5 || pexp < scaling[plevel + 1])) {
+          appendButton(
+            level + (plevel + 1),
+            () => {
               plevel = plevel + 1
               patk = patk + 1
               php = phpmax = phpmax + 2
-              // end custom shop action
-
               tick(castle)
             }
-          }
-        )
+          )
+        } else {
+          a.append(nope, nl)
+        }
 
         // forest
         // first use of short form, check if smaller to never use short form
@@ -318,12 +302,10 @@
         appendButton(look)
 
         // look for dragon - locked until plevel == 5
-        appendButton(
-          dragon + (
-            plevel == 5 ? look : nope
-          ),
-          () => {
-            if (plevel == 5) {
+        if (plevel == 5) {
+          appendButton(
+            dragon,
+            () => {
               fclass = dragon
               f$ = scaling[plevel] * 2
               fexp = scaling[plevel] * 2
@@ -333,8 +315,10 @@
 
               tick(attack)
             }
-          }
-        )
+          )
+        } else {
+          a.append(nope, nl)
+        }
 
 
         // back to castle
@@ -343,13 +327,11 @@
       if (plocation == look) {
         // if die0 == die1, random event
         // else, setup a battle and go to it
-
-
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
             // terrible - lost MAX HP
-            phpmax = phpmax - ( die2 == 1 ? (plevel + 1) : 0 )
+            phpmax = phpmax - (die2 == 1 ? (plevel + 1) : 0)
             // bad - lose HP 
             php = php - (plevel + 1)
 
@@ -415,7 +397,7 @@
           }
 
           // handle if the event killed player
-          appendButton(php <= 0 ? dead : forest )
+          appendButton(php <= 0 ? dead : forest)
         }
         else {
           // create monster
@@ -435,7 +417,7 @@
 
           // attack
           //appendButton( attack )
-          appendButton( attack )//short form - see if less bytes
+          appendButton(attack)//short form - see if less bytes
 
           // can always run here - it's in attack that we check pclass
           // back to forest
@@ -489,10 +471,12 @@
 
           // attack
           //appendButton( attack )
-          appendButton( attack )//short form - see if less bytes
+          appendButton(attack)//short form - see if less bytes
 
-          if( (pclass == rogue || die2 > 3 ) ){
-            appendButton( forest )
+          if ((pclass == rogue || die2 > 3)) {
+            appendButton(forest)
+          } else {
+            a.append(nope, nl)
           }
         }
       }
@@ -510,13 +494,13 @@
       🍀💰10⚔️7❤️18/18🎚️1/0
       */
       a.append(
-        pclass + 
-        $ + p$ + 
-        attack + patk + 
+        pclass +
+        $ + p$ +
+        attack + patk +
         health + php + sep + phpmax +
         level + plevel + sep + pexp
       )
-    }    
+    }
     tick(pclass = decision)
   </script>
 </body>
