@@ -113,7 +113,7 @@
     let p$
     let patk
     let php
-    let phpmax
+    //let phpmax
     let pweapon
     let plevel
     let pexp
@@ -175,7 +175,7 @@
         // init player
         p$ = 10
         patk = 5
-        php = phpmax = 10
+        php = 10
         pweapon = 0
 //        pshield = 0
         plevel = 0
@@ -209,7 +209,7 @@
           magic,
           () => {
             pclass = magic
-            php = phpmax = phpmax + 2
+            php = php + 2
 
             tick(castle)
           }
@@ -231,7 +231,6 @@
               
               pweapon = pweapon + 1              
               patk = patk + 1
-              php = phpmax = phpmax + 2            
 
               tick(castle)
             }
@@ -240,8 +239,9 @@
           a.append(nope, nl)
         }
 
-        // healer        
-        if (!(p$ < 5 || php >= phpmax)) {
+        // healer 
+        // you can now just buy HP lol      
+        if (!(p$ < 5)) {
           appendButton(
             health + $ + 5,
             () => {
@@ -261,7 +261,7 @@
             () => {
               plevel = plevel + 1
               patk = patk + 1
-              php = phpmax = phpmax + 2
+              php = php + 2
 
               tick(castle)
             }
@@ -307,10 +307,7 @@
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
-            // terrible - lost MAX HP
-            phpmax = phpmax - (die2 == 1 ? (plevel + 1) : 0)
-            // bad - lose HP 
-            php = php - (plevel + 1)
+            php = php - ( (plevel + 1) * ( die2 == 1 ? 2 : 1 ) )
 
             a.append(unlucky + vampire, nl)
           }
@@ -359,12 +356,12 @@
             if (die2 == 6) {
               // draw message, give ATK, give MAX HP
               patk = patk + 1
-              phpmax = phpmax + 2
+              php = php + 2
               // 10 * the money
               p$ = p$ + die2 * scaling[plevel + 1]
             }
 
-            php = phpmax
+            php = php + 2
 
             a.append(
               lucky + unicorn,
@@ -474,7 +471,7 @@
         pclass +
         $ + p$ +
         attack + patk +
-        health + php + sep + phpmax +
+        health + php +
         level + plevel + sep + pexp
       )
     }
