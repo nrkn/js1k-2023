@@ -41,3 +41,6 @@ the goal is:
 1594B from minor main
 1381B from branch no-sword-shield, but was too drastic so did a half one
 1557B from partial no-sword-shield
+1536B from remove-suffixes
+// nb branches taking too long, let's just rely on commits to main
+// use desc for what we tried
