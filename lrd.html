@@ -126,7 +126,6 @@
     let pshield
     let plevel
     let pexp
-    let pturns
 
     // forest encounter state
     // monster emoji
@@ -187,7 +186,6 @@
         pshield = 0
         plevel = 0
         pexp = 0
-        pturns = 0
 
         a.append(decision, nl)
 
@@ -549,9 +547,7 @@
         $ + p$ + 
         attack + patk + 
         health + php + sep + phpmax +
-        level + plevel + sep + pexp,
-        time,
-        pturns = pturns + 1
+        level + plevel + sep + pexp
       )
     }
     tick(decision)
