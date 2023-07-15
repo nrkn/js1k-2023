@@ -97,8 +97,8 @@
     const sep = '/'
 
     const monsters = [
-      bat, rat, snake,
-      clown, goblin, spider,
+      rat, rat, snake,
+      troll, clown, spider,
       wolf, ghost, skeleton,
       troll, devil, bear,
       zombie, cyclops, alien,
@@ -178,7 +178,6 @@
 
       if (plocation == decision) {
         // init player
-        pclass = decision
         p$ = 25
         patk = 5
         php = phpmax = 10
@@ -368,11 +367,10 @@
           }
           // bad
           if (die0 == 3) {
-            // got stuck in spider web, lose HP
             // draw message, take HP
             php = php - (plevel + 1)
 
-            a.append(unlucky + web, nl)
+            a.append(unlucky + trap, nl)
           }
           // good
           if (die0 == 4) {
@@ -389,7 +387,7 @@
             // draw message, give $, link back to forest
             p$ = p$ + ((die2 * scaling[plevel + 1] / 10) | 0)
 
-            a.append(lucky + rainbow, nl)
+            a.append(lucky + fairy, nl)
           }
           // super good
           if (die0 == 6) {
@@ -518,8 +516,8 @@
         health + php + sep + phpmax +
         level + plevel + sep + pexp
       )
-    }
-    tick(decision)
+    }    
+    tick(pclass = decision)
   </script>
 </body>
 
