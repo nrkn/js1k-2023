@@ -94,7 +94,7 @@
     const dice = '🎲'
     //    const ws = ' '
     const nl = '\n'
-    const sep = '/'
+    //const sep = '/'
 
     const monsters = [
       rat, rat, snake,
@@ -257,7 +257,7 @@
         // gym
         if (!(plevel == 5 || pexp < scaling[plevel + 1])) {
           appendButton(
-            level + (plevel + 1),
+            level,
             () => {
               plevel = plevel + 1
               patk = patk + 1
@@ -472,7 +472,7 @@
         $ + p$ +
         attack + patk +
         health + php +
-        level + plevel + sep + pexp
+        level + pexp
       )
     }
     tick(pclass = nope)
