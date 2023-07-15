@@ -398,17 +398,13 @@
       }
       if (plocation == attack) {
         // todo: calc and display result of this battle round
-        if ((patk + die0) == (fatk + die1)) {
-          // no hit      
-          // a.append(shield, nl)
-        }
-        else if ((patk + die0) > (fatk + die1)) {
+        if ((patk + die0) > (fatk + die1)) {
           // player hit monster          
           fhp = fhp - (2 + pweapon)
 
           // a.append(fclass + health + -(2 + pweapon), nl)
         }
-        else {
+        else if( (patk + die0) < (fatk + die1) ){
           // monster hit    
           php = php - fdmg
 
