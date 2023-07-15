@@ -20,6 +20,9 @@ you do too much damage - just use 2 + pweapon + ( plevel - 1 ) maybe
 
 main has no golfing applied
 
+nb - we can get about 56 bytes when we remove let and const etc, so assume
+that we are good around 1080 bytes or so
+
 let's start making branches
 
 the goal is:
@@ -31,3 +34,4 @@ the goal is:
 1919B from branch button-helper-fn
 1894B from branch inline-temps
 1880B from branch inline-temps revision
+1664B from branch brutal-display-rip
