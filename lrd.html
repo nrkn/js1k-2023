@@ -417,7 +417,7 @@
         c = d.createElement('b')
         c.append(dice + die0 + dice + die1)
         line0 = c
-        
+
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
@@ -441,7 +441,7 @@
               php = php - plevel + 1
 
               c = d.createElement('b')
-              c.append(dice + die2 + health + '-', plevel + 1 )
+              c.append(dice + die2 + health + '-', plevel + 1)
               line2 = c
             }
           }
@@ -450,7 +450,7 @@
             // money fell down hole, lose some $
             // max can lose is 3 * die2 * plevel
             // invert die2 so that if eg rogue, less likely to be 6x
-            die2 = 6 - die2
+            die2 = 7 - die2
             tmpValue0 = 3 * die2 * plevel
             tmpValue0 = tmpValue0 > p$ ? p$ : tmpValue0
 
@@ -561,24 +561,120 @@
         }
         else {
           // todo battle
-          // choose a monster based on plevel and dice          
+          /*
+            // level 1
+            const bat = '🦇'
+            const rat = '🐀'
+            const snake = '🐍'
+            // level 2
+            const clown = '🤡'
+            const goblin = '👺'
+            const spider = '🕷️'
+            // level 3
+            const wolf = '🐺'
+            const ghost = '👻'
+            const skeleton = '💀'
+            // level 4
+            const troll = '👹'
+            const devil = '😈'
+            const bear = '🐻'
+            // level 5
+            const zombie = '🧟'
+            const cyclops = '👁️'
+            const alien = '👾'          
+          */
+          // choose a monster based on plevel and dice  
+          if (plevel == 1 && die0 < 3) {
+            fclass = bat
+          }
+          else if (plevel == 1 && die0 < 5) {
+            fclass = rat
+          }
+          else if (plevel == 1) {
+            fclass = snake
+          }
+          else if (plevel == 2 && die0 < 3) {
+            fclass = clown
+          }
+          else if (plevel == 2 && die0 < 5) {
+            fclass = goblin
+          }
+          else if (plevel == 2) {
+            fclass = spider
+          }
+          else if (plevel == 3 && die0 < 3) {
+            fclass = wolf
+          }
+          else if (plevel == 3 && die0 < 5) {
+            fclass = ghost
+          }
+          else if (plevel == 3) {
+            fclass = skeleton
+          }
+          else if (plevel == 4 && die0 < 3) {
+            fclass = troll
+          }
+          else if (plevel == 4 && die0 < 5) {
+            fclass = devil
+          }
+          else if (plevel == 4) {
+            fclass = bear
+          }
+          else if (plevel == 5 && die0 < 3) {
+            fclass = zombie
+          }
+          else if (plevel == 5 && die0 < 5) {
+            fclass = cyclops
+          }
+          else if (plevel == 5) {
+            fclass = alien
+          }
 
-          // setup monster
+          /*
+            // reward $ and xp
+            let f$
+            let fexp
+            // monster atk
+            let fatk
+            // monster hp
+            let fhp
+            // monster dmg - for player it's plevel + 1 + pweapon, for monster just a num
+            let fdmg          
+          */
 
-          // create battle link, and run if allowed
-          // fighters can't run, mages depend on dice roll, rogues can always
+          // setup monster - we've used die0 and die1, leave die2 for mage run
+          f$ = ((die0 + die1) * scaling[plevel] / 100) | 0
+          fexp = ((die1 + die2) * scaling[plevel] / 100) | 0
+          fatk = 7 - die1 + plevel
+          fhp = (7 - die0) * 2 + plevel
+          fdmg = 2 + (plevel - 1) * 2 // 2 at level 1
 
-          // if use die0 to choose monster, use die1 to choose if can run
+          // display monster
+          c = d.createElement('b')
+          c.append(fclass + ws + attack + fatk + ws + health + fhp)
+          line0 = c
 
-          // TEMP until code is here so we can get out
-          // back to forest - assume line6 is available
+          line1 = decision
+
+          // attack
           cline = d.createElement('button')
           cline.onclick = () => {
+            plocation = attack
+            tick()
+          }
+          cline.append(attack)
+          line2 = cline
+
+          // can always run here - it's in attack that we check pclass
+          // back to forest
+          cline = d.createElement('button')
+          cline.onclick = () => {
+            fclass = 0
             plocation = forest
             tick()
           }
           cline.append(forest)
-          line6 = cline
+          line3 = cline
         }
       }
       else if (plocation == dragon) {
@@ -586,9 +682,125 @@
         // we set up battle?
       }
       else if (plocation == attack) {
-        // todo - we have a monster and we are attacking it
-        // but maybe it has 0 hp now, or we have 0 hp and are dead
-        // handle if the monster killed player
+        // todo: calc and display result of this battle round
+
+
+        if ((patk + die0) == (fatk + die1)) {
+          // no hit      
+          c = d.createElement('b')
+          c.append(shield + shield)
+          line0 = c
+        }
+        else if ((patk + die0) > (fatk + die1)) {
+          // player hit monster
+          tmpValue0 = (2 + (plevel - 1) * 2) + pweapon // 2 at level 1      
+          fhp = fhp - tmpValue0
+
+          c = d.createElement('b')
+          c.append(fclass + health + -tmpValue0)
+          line0 = c
+        }
+        else {
+          // monster hit    
+          tmpValue0 = fdmg - parmor
+
+          if (tmpValue0 <= 0) {
+            // no hit      
+            c = d.createElement('b')
+            c.append(shield + shield)
+            line0 = c
+          }
+          else {
+            php = php - tmpValue0
+
+            c = d.createElement('b')
+            c.append(pclass + health + -tmpValue0)
+            line0 = c
+          }
+        }
+
+        // player
+        c = d.createElement('b')
+        c.append(dice + die0 + ws + pclass + ws + attack + patk + ws + health + php)
+        line1 = c
+
+        // display monster
+        c = d.createElement('b')
+        c.append(dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp)
+        line2 = c
+
+        if (php <= 0) {
+          // player died
+          c = d.createElement('b')
+          c.append(pclass + dead)
+          line3 = c
+
+          // go to dead
+          cline = d.createElement('button')
+          cline.onclick = () => {
+            plocation = dead
+            tick()
+          }
+          cline.append(dead)
+          line4 = cline
+        }
+        else if (fhp <= 0) {
+          // give rewards
+          p$ = p$ + f$
+          pexp = pexp + fexp
+
+          // enemy died
+          c = d.createElement('b')
+          c.append(fclass + dead)
+          line3 = c
+
+          // show rewards
+          c = d.createElement('b')
+          c.append($ + f$ + ws + level + fexp)
+          line4 = c
+
+          // exit to forest
+          cline = d.createElement('button')
+          cline.onclick = () => {
+            fclass = 0
+            plocation = forest
+            tick()
+          }
+          cline.append(forest)
+          line5 = cline
+        }
+        else {
+          // next round, or run if allowed
+
+          line4 = decision
+
+          // attack
+          cline = d.createElement('button')
+          cline.onclick = () => {
+            plocation = attack
+            tick()
+          }
+          cline.append(attack)
+          line5 = cline
+
+          tmpLocked0 = pclass == fighter || pclass == magic && die2 < 4
+          tmpValue0 = pclass == fighter ? nope + fighter : tmpLocked0 ? nope + magic + unlucky : pclass == magic ? magic : lucky
+          //run, if !tmpLocked0
+          cline = d.createElement('button')
+          cline.onclick = () => {
+            if (!tmpLocked0) {
+              fclass = 0
+              plocation = forest
+              tick()
+            }
+          }
+          // button label
+          cline.append(forest)
+          // suffix
+          c = d.createElement('b')
+          c.append(cline, tmpValue0)
+          line6 = c
+        }
       }
       else if (plocation == dead) {
         a.append(dead + dead + dead)
@@ -627,7 +839,6 @@
       if (line6) {
         a.append(line6, '\n')
       }
-
 
       // last, draw stats
       /*
