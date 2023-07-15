@@ -39,3 +39,5 @@ the goal is:
 1798B from branch no-state, worse, did not merge into main
 1609B from branch monster-array
 1594B from minor main
+1381B from branch no-sword-shield, but was too drastic so did a half one
+1557B from partial no-sword-shield
