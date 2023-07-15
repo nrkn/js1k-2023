@@ -28,3 +28,4 @@ the goal is:
 1966B from branch no-more-lines, merged into main
 1932B from minor in main (should have been done in no-more-lines)
 -1955B from branch cat-adjacent-appends, worse, did not merge into main
+1919B from branch button-helper-fn
