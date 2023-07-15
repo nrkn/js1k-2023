@@ -93,6 +93,7 @@
     const gym = '🏋️'
     const dice = '🎲'
     const ws = ' '
+    const nl = '\n'
 
     // shop prices, levels, etc - all use this for scaling - will need tweaking
     const scaling = [0, 128, 512, 1024, 4096, 16384, 33768]
@@ -147,7 +148,7 @@
       c = d.createElement('button')
       c.onclick = onclick
       c.append(label)
-      a.append(c, suffix, '\n')
+      a.append(c, suffix, nl)
     }
 
     const tick = () => {
@@ -182,7 +183,7 @@
       // a.append(c)
       //
       
-      a.append(plocation + ws + lucky + dragon + 1024, '\n')
+      a.append(plocation + ws + lucky + dragon + 1024, nl)
 
       if (plocation == decision) {
         // init player
@@ -197,7 +198,7 @@
         pturns = 0
 
 
-        a.append(decision, '\n')
+        a.append(decision, nl)
 
         // choose rogue
         appendButton(
@@ -241,7 +242,7 @@
       else if (plocation == castle) {
         // do castle stuff 
 
-        a.append(decision, '\n')
+        a.append(decision, nl)
 
         // weapon shop
         // can buy if not max and if have money
@@ -331,7 +332,7 @@
         appendButton(forest)
       }
       else if (plocation == forest) {
-        a.append(decision, '\n')
+        a.append(decision, nl)
 
         // explore
         appendButton(look)
@@ -363,12 +364,12 @@
         // if die0 == die1, random event
         // else, setup a battle and go to it
 
-        a.append(dice + die0 + dice + die1, '\n')
+        a.append(dice + die0 + dice + die1, nl)
 
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
-            a.append(unlucky + vampire, '\n')
+            a.append(unlucky + vampire, nl)
 
 
             // terrible - lost MAX HP
@@ -377,14 +378,14 @@
               phpmax = phpmax - (plevel + 1)
               php = php - (plevel + 1)
 
-              a.append(dice + die2 + health + '-', plevel + 1, '/-', plevel + 1, '\n')
+              a.append(dice + die2 + health + '-', plevel + 1, '/-', plevel + 1, nl)
             }
             // bad - lose HP 
             else {
               // draw message, take HP
               php = php - (plevel + 1)
 
-              a.append(dice + die2 + health + '-', plevel + 1, '\n')
+              a.append(dice + die2 + health + '-', plevel + 1, nl)
             }
           }
           // bad
@@ -399,8 +400,8 @@
 
             p$ = p$ - die0
 
-            a.append(unlucky + trap, '\n')
-            a.append(dice + die2 + $ + '-' + die0, '\n')
+            a.append(unlucky + trap, nl)
+            a.append(dice + die2 + $ + '-' + die0, nl)
           }
           // bad
           else if (die0 == 3) {
@@ -409,8 +410,8 @@
 
             php = php - (plevel + 1)
 
-            a.append(unlucky + web, '\n')
-            a.append(health + '-' + plevel, '\n')
+            a.append(unlucky + web, nl)
+            a.append(health + '-' + plevel, nl)
           }
           // good
           else if (die0 == 4) {
@@ -419,8 +420,8 @@
 
             php = php + die2 * (plevel + 1)
 
-            a.append(lucky + fairy, '\n')
-            a.append(dice + die2 + health + '+' + die2, '\n')
+            a.append(lucky + fairy, nl)
+            a.append(dice + die2 + health + '+' + die2, nl)
           }
           // good
           else if (die0 == 5) {
@@ -428,15 +429,15 @@
             // draw message, give $, link back to forest
             p$ = p$ + ((die2 * scaling[plevel + 1] / 10) | 0)
 
-            a.append(lucky + rainbow, '\n')
-            a.append(dice + die2 + $ + (die2 * scaling[plevel + 1] / 10) | 0, '\n')
+            a.append(lucky + rainbow, nl)
+            a.append(dice + die2 + $ + (die2 * scaling[plevel + 1] / 10) | 0, nl)
           }
           // super good
           else if (die0 == 6) {
             // reuse die0
             die0 = (die2 * scaling[plevel + 1] / 10) | 0
 
-            a.append(lucky + unicorn, '\n')
+            a.append(lucky + unicorn, nl)
 
             // unicorn - get lots of stuff
             // amazing - get some ATK, some MAX HP
@@ -453,7 +454,7 @@
                 attack + '+1' + ws +
                 health + '+2/+2' + ws +
                 health + health,
-                '\n'
+                nl
               )
             }
             else {
@@ -461,7 +462,7 @@
                 dice + die2 + ws +
                 $ + die0 + ws +
                 health + health,
-                '\n'
+                nl
               )
             }
 
@@ -569,10 +570,10 @@
           fdmg = 2 + plevel
 
           // display monster
-          a.append(fclass + ws + attack + fatk + ws + health + fhp, '\n')
+          a.append(fclass + ws + attack + fatk + ws + health + fhp, nl)
 
           //line1 = decision
-          a.append(decision, '\n')
+          a.append(decision, nl)
 
           // attack
           //appendButton( attack )
@@ -594,36 +595,36 @@
 
         if ((patk + die0) == (fatk + die1)) {
           // no hit      
-          a.append(shield + shield, '\n')
+          a.append(shield + shield, nl)
         }
         else if ((patk + die0) > (fatk + die1)) {
           // player hit monster          
           fhp = fhp - (2 + pweapon)
 
-          a.append(fclass + health + -(2 + pweapon), '\n')
+          a.append(fclass + health + -(2 + pweapon), nl)
         }
         else {
           // monster hit    
           if ((fdmg - pshield) <= 0) {
             // no hit      
-            a.append(shield + shield, '\n')
+            a.append(shield + shield, nl)
           }
           else {
             php = php - (fdmg - pshield)
 
-            a.append(pclass + health + -(fdmg - pshield), '\n')
+            a.append(pclass + health + -(fdmg - pshield), nl)
           }
         }
 
         // player
-        a.append(dice + die0 + ws + pclass + ws + attack + patk + ws + health + php, '\n')
+        a.append(dice + die0 + ws + pclass + ws + attack + patk + ws + health + php, nl)
 
         // display monster
-        a.append(dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp, '\n')
+        a.append(dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp, nl)
 
         if (php <= 0) {
           // player died
-          a.append(pclass + dead, '\n')
+          a.append(pclass + dead, nl)
           // go to dead
           appendButton( dead )
         }
@@ -633,10 +634,10 @@
           pexp = pexp + fexp
 
           // enemy died
-          a.append(fclass + dead, '\n')
+          a.append(fclass + dead, nl)
 
           // show rewards
-          a.append($ + f$ + ws + level + fexp, '\n')
+          a.append($ + f$ + ws + level + fexp, nl)
 
           if (fclass == dragon) {
             // exit to win
@@ -654,7 +655,7 @@
         else {
           // next round, or run if allowed
 
-          a.append(decision, '\n')
+          a.append(decision, nl)
 
           // attack
           //appendButton( attack )
@@ -674,11 +675,11 @@
         }
       }
       else if (plocation == dead) {
-        a.append(dead + dead + dead, '\n')
+        a.append(dead + dead + dead, nl)
         // no outbound links, sorry, game over!
       }
       else if (plocation == win) {
-        a.append(win + win + win, '\n')
+        a.append(win + win + win, nl)
         // no outbound links, sorry, game over!        
       }
 

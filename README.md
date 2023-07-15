@@ -29,3 +29,4 @@ the goal is:
 1932B from minor in main (should have been done in no-more-lines)
 -1955B from branch cat-adjacent-appends, worse, did not merge into main
 1919B from branch button-helper-fn
+1894B from branch inline-temps
