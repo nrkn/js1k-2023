@@ -230,10 +230,10 @@
         // weapon shop
         // can buy if not max and if have money
         appendButton(
-          weapon + (pweapon + 1) + (
+          weapon + $ + (
             pweapon == 5 || p$ < scaling[pweapon + 1] ?
               nope :
-              $ + scaling[pweapon + 1]
+              scaling[pweapon + 1]
           ),
           () => {
             if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
@@ -251,10 +251,10 @@
         // shield shop
         // can buy if not max and if have money
         appendButton(
-          shield + (pshield + 1) + (
+          shield + $ + (
             pshield == 5 || p$ < scaling[pshield + 1] ?
               nope :
-              $ + scaling[pshield + 1]
+              scaling[pshield + 1]
           ),
           () => {
             if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
@@ -272,8 +272,8 @@
 
         // healer        
         appendButton(
-          health + 1 + (
-            (p$ < 5 || php >= phpmax) ? nope : $ + 5
+          health + $ + (
+            (p$ < 5 || php >= phpmax) ? nope : 5
           ),
           () => {
             if (!(p$ < 5 || php >= phpmax)) {
@@ -289,8 +289,8 @@
 
         // gym
         appendButton(
-          level + (plevel + 1) + (
-            (plevel == 5 || pexp < scaling[plevel + 1]) ? nope : up
+          level + (
+            (plevel == 5 || pexp < scaling[plevel + 1]) ? nope : plevel + 1
           ),
           () => {
             if (!(plevel == 5 || pexp < scaling[plevel + 1])) {
@@ -490,10 +490,7 @@
           pexp = pexp + fexp
 
           // enemy died
-          a.append(fclass + dead, nl)
-
-          // show rewards
-          a.append($ + f$ + level + fexp, nl)
+          a.append(fclass + dead + $ + f$ + level + fexp, nl)
 
           if (fclass == dragon) {
             // exit to win
@@ -540,7 +537,7 @@
 
       // last, draw stats
       /*
-      🍀 💰10 ⚔️7 ❤️18/18 🗡️0 🛡️0 🎚️1/0 🔒2/128 ⏰17
+      🍀💰10⚔️7❤️18/18🎚️1/0
       */
       a.append(
         pclass + 
