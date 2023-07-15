@@ -307,7 +307,7 @@
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
-            php = php - ( (plevel + 1) * ( die2 == 1 ? 2 : 1 ) )
+            php = php - ( (plevel + 1) * die2 )
 
             a.append(unlucky + vampire, nl)
           }
@@ -316,8 +316,7 @@
             // money fell down hole, lose some $
             // max can lose is 3 * die2 * plevel
             // reuse die0
-            die0 = 3 * die2 * (plevel + 1)
-            die0 = die0 > p$ ? p$ : die0
+            die0 = 3 * ( p$ / die2 )|0
 
             p$ = p$ - die0
 
@@ -343,13 +342,14 @@
           if (die0 == 5) {
             // rainbow = get some $
             // draw message, give $, link back to forest
-            p$ = p$ + ((die2 * scaling[plevel + 1] / 10) | 0)
+            p$ = p$ + ((scaling[plevel + 1] / die2) | 0)
 
             a.append(lucky + fairy, nl)
           }
           // super good
           if (die0 == 6) {
-            p$ = p$ + (die2 * scaling[plevel + 1] / 10) | 0
+            p$ = p$ + ((scaling[plevel + 1] / die2) | 0)
+            php = php + 2
 
             // unicorn - get lots of stuff
             // amazing - get some ATK, some MAX HP
@@ -358,10 +358,8 @@
               patk = patk + 1
               php = php + 2
               // 10 * the money
-              p$ = p$ + die2 * scaling[plevel + 1]
+              p$ = p$ + ((scaling[plevel + 1] / die2) | 0) * 10
             }
-
-            php = php + 2
 
             a.append(
               lucky + unicorn,
@@ -377,10 +375,11 @@
           fclass = monsters[plevel * 3 + die0]
 
           // setup monster - we've used die0 and die1, leave die2 for mage run
+          // complex - let's make it like the others
           f$ = ((die0 + die1) * scaling[plevel + 1] / 100) | 0
           fexp = ((die1 + die2) * scaling[plevel + 1] / 100) | 0
-          fatk = (7 - die1) + plevel
-          fhp = ((7 - die0) + plevel) * 2
+          fatk = die1 + plevel
+          fhp = (die0 + plevel) * 2
           fdmg = 2 + plevel
 
           // display monster
