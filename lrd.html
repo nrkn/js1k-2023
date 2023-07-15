@@ -30,8 +30,8 @@
     //
     // stat related
     const $ = '💰'
-    const weapon = '🗡️'
-    const shield = '🛡️'
+    //const weapon = '🗡️'
+    //const shield = '🛡️'
     const rogue = '🍀'
     const fighter = '💪'
     const magic = '🔮'
@@ -121,8 +121,6 @@
     let patk
     let php
     let phpmax
-    let pweapon
-    let pshield
     let plevel
     let pexp
     let pturns
@@ -182,8 +180,6 @@
         p$ = 25
         patk = 5
         php = phpmax = 10
-        pweapon = 0
-        pshield = 0
         plevel = 0
         pexp = 0
         pturns = 0
@@ -227,49 +223,6 @@
         // do castle stuff 
 
         a.append(decision, nl)
-
-        // weapon shop
-        // can buy if not max and if have money
-        appendButton(
-          weapon + (pweapon + 1),
-          () => {
-            if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
-              // begin custom shop action
-              p$ = p$ - scaling[pweapon + 1]
-              pweapon = pweapon + 1
-              patk = patk + 1
-              // end custom shop action
-
-              tick(castle)
-            }
-          },
-          (pweapon == 5 || p$ < scaling[pweapon + 1]) ?
-            nope + $ + scaling[pweapon + 1] :
-            $ + scaling[pweapon + 1]
-        )
-
-        // shield shop
-        // can buy if not max and if have money
-        appendButton(
-          shield + (pshield + 1),
-          () => {
-            if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
-              // begin custom shop action
-              p$ = p$ - scaling[pshield + 1]
-              pshield = pshield + 1
-              phpmax = phpmax + 2
-              php = php + 2
-              // end custom shop action
-
-              tick(castle)
-            }
-          },
-          pshield == 5 || p$ < scaling[pshield + 1] ?
-            pshield == 5 ?
-              nope + shield :
-              nope + $ + scaling[pshield + 1] :
-            $ + scaling[pshield + 1]
-        )
 
         // healer        
         appendButton(
@@ -474,21 +427,15 @@
         }
         else if ((patk + die0) > (fatk + die1)) {
           // player hit monster          
-          fhp = fhp - (2 + pweapon)
+          fhp = fhp - (2 + plevel)
 
-          a.append(fclass + health + -(2 + pweapon), nl)
+          a.append(fclass + health + -(2 + plevel), nl)
         }
         else {
           // monster hit    
-          if ((fdmg - pshield) <= 0) {
-            // no hit      
-            a.append(shield, nl)
-          }
-          else {
-            php = php - (fdmg - pshield)
+          php = php - fdmg
 
-            a.append(pclass + health + -(fdmg - pshield), nl)
-          }
+          a.append(pclass + health + -fdmg, nl) 
         }
 
         // display monster
@@ -560,11 +507,8 @@
         $ + p$ + ws +
         attack + patk + ws +
         health + php + ws + phpmax + ws +
-        weapon + pweapon + ws +
-        shield + pshield + ws +
-        level + plevel + ws + pexp,
-        ws + time,
-        pturns = pturns + 1
+        level + plevel + ws + pexp + ws + 
+        time, pturns = pturns + 1
       )
     }
     tick(decision)
