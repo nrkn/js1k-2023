@@ -95,7 +95,7 @@
     const ws = ' '
 
     // shop prices, levels, etc - all use this for scaling - will need tweaking
-    const scaling = [0, 128, 512, 1024, 4096, 16384, 33768 ]
+    const scaling = [0, 128, 512, 1024, 4096, 16384, 33768]
 
     // player stats etc
     /*
@@ -133,13 +133,6 @@
 
     // output
     let cline // current line
-    let line0
-    let line1
-    let line2
-    let line3
-    let line4
-    let line5
-    let line6 // i think that's all we need
 
     // dice
     let die0
@@ -151,8 +144,6 @@
     let tmpLocked0
 
     const tick = () => {
-      line0 = line1 = line2 = line3 = line4 = line5 = line6 = 0
-
       // rogues are luckier - they have a chance to reroll 1s
       // therefore, 1 or a low value should always be bad, and high values
       // should always be good
@@ -193,32 +184,16 @@
         // init player
         pclass = decision
         p$ = 25
-        // we have 6 points to spend, health only cost 0.5, eg we get 2 per point
         patk = 5
         php = phpmax = 10
-        // patk = patk + die0 // assign die0 to attack
-        // php = phpmax = php + (6 - die0) * 2 // assign the rest to health
         pweapon = 0
         pshield = 0
         plevel = 0
         pexp = 0
         pturns = 0
 
-        // set the lines to class choices
-        line0 = decision
 
-        // // reroll
-        // cline = d.createElement('button')
-        // cline.onclick = () => {
-        //   plocation = decision
-        //   tick()
-        // }
-        // // button label
-        // cline.append(dice)
-        // // suffix
-        // c = d.createElement('b')
-        // c.append(cline, die0)
-        // line1 = c
+        a.append(decision, '\n')
 
         // choose rogue
         cline = d.createElement('button')
@@ -228,11 +203,14 @@
           plocation = castle
           tick()
         }
+        //button
         cline.append(lucky)
-        // trick to allow a suffix outside link
-        c = d.createElement('b')
-        c.append(cline, dice + lucky)
-        line2 = c
+        a.append(
+          //button
+          cline,
+          //suffix
+          dice + lucky, '\n'
+        )
 
         // choose fighter
         cline = d.createElement('button')
@@ -244,10 +222,12 @@
           tick()
         }
         cline.append(fighter)
-        // trick to allow a suffix outside link
-        c = d.createElement('b')
-        c.append(cline, attack, patk + 1)
-        line3 = c
+        a.append(
+          //button
+          cline,
+          //suffix
+          attack, patk + 1, '\n'
+        )
 
         // choose magic
         cline = d.createElement('button')
@@ -259,20 +239,21 @@
           tick()
         }
         cline.append(magic)
-        // trick to allow a suffix outside link
-        c = d.createElement('b')
-        c.append(cline, health, phpmax + 2)
-        line4 = c
+        a.append(
+          //button
+          cline,
+          //suffix
+          health, phpmax + 2, '\n'
+        )
       }
       // these are exclusive anyway so check if removing else is better for regpack later
       else if (plocation == castle) {
         // do castle stuff 
 
-        line0 = decision
+        a.append(decision, '\n')
 
         // weapon shop
         // can buy if not max and if have money
-
         cline = d.createElement('button')
         cline.onclick = () => {
           if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
@@ -288,17 +269,17 @@
         }
         // button label
         cline.append(weapon + '+', pweapon + 1)
-        // suffix - after and outside button
-        c = d.createElement('b')
-        c.append(
+
+        a.append(
           cline,
+          // suffix - after and outside button
           pweapon == 5 || p$ < scaling[pweapon + 1] ?
             pweapon == 5 ?
               nope + weapon :
               nope + $ + scaling[pweapon + 1] :
-            $ + scaling[pweapon + 1]
+            $ + scaling[pweapon + 1],
+          '\n'
         )
-        line1 = c
 
         // shield shop
         // can buy if not max and if have money
@@ -318,18 +299,16 @@
         }
         // button label
         cline.append(shield + '+', pshield + 1)
-        // suffix - after and outside button
-        c = d.createElement('b')
-        c.append(
+        a.append(
           cline,
+          // suffix - after and outside button
           pshield == 5 || p$ < scaling[pshield + 1] ?
             pshield == 5 ?
               nope + shield :
               nope + $ + scaling[pshield + 1] :
-            $ + scaling[pshield + 1]
+            $ + scaling[pshield + 1],
+          '\n'
         )
-
-        line2 = c
 
         // healer
         cline = d.createElement('button')
@@ -346,13 +325,12 @@
         }
         // button label
         cline.append(health + '+1')
-        // suffix - after and outside button
-        c = d.createElement('b')
-        c.append(
+        a.append(
           cline,
-          php == phpmax ? nope + health + health : p$ < 5 ? nope + $ + 5 : $ + 5
+          // suffix - after and outside button
+          php == phpmax ? nope + health + health : p$ < 5 ? nope + $ + 5 : $ + 5,
+          '\n'
         )
-        line3 = c
 
         // gym
         tmpLocked0 = plevel == 5
@@ -373,13 +351,12 @@
         }
         // button label
         cline.append(level, plevel + 1)
-        c = d.createElement('b')
-        c.append(
+        a.append(
           cline,
           tmpLocked0 ? nope :
-            pexp < scaling[plevel + 1] ? nope + scaling[plevel + 1] : up + scaling[plevel + 1]
+            pexp < scaling[plevel + 1] ? nope + scaling[plevel + 1] : up + scaling[plevel + 1],
+          '\n'
         )
-        line4 = c
 
         // forest
         cline = d.createElement('button')
@@ -388,10 +365,10 @@
           tick()
         }
         cline.append(forest)
-        line5 = cline
+        a.append(cline, '\n')
       }
       else if (plocation == forest) {
-        line0 = decision
+        a.append(decision, '\n')
 
         // explore
         cline = d.createElement('button')
@@ -400,7 +377,7 @@
           tick()
         }
         cline.append(look)
-        line1 = cline
+        a.append(cline, '\n')
 
         // look for dragon - locked until plevel == 5
         cline = d.createElement('button')
@@ -419,13 +396,12 @@
         }
         // button label
         cline.append(dragon)
-        // suffix - after and outside button
-        c = d.createElement('b')
-        c.append(
+        a.append(
           cline,
-          plevel == 5 ? look : nope + level + 5
+          // suffix - after and outside button
+          plevel == 5 ? look : nope + level + 5,
+          '\n'
         )
-        line2 = c
 
         // back to castle
         cline = d.createElement('button')
@@ -434,22 +410,22 @@
           tick()
         }
         cline.append(castle)
-        line3 = cline
+        a.append(cline, '\n')
       }
       else if (plocation == look) {
         // if die0 == die1, random event
         // else, setup a battle and go to it
 
-        c = d.createElement('b')
-        c.append(dice + die0 + dice + die1)
-        line0 = c
+        a.append( dice + die0 + dice + die1, '\n')
 
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
-            c = d.createElement('b')
-            c.append(unlucky + vampire)
-            line1 = c
+            // c = d.createElement('b')
+            // c.append(unlucky + vampire)
+            // line1 = c
+            a.append( unlucky + vampire, '\n' )
+            
 
             // terrible - lost MAX HP
             if (die2 == 1) {
@@ -457,18 +433,20 @@
               phpmax = phpmax - (plevel + 1)
               php = php - (plevel + 1)
 
-              c = d.createElement('b')
-              c.append(dice + die2 + health + '-', plevel + 1, '/-', plevel + 1)
-              line2 = c
+              // c = d.createElement('b')
+              // c.append(dice + die2 + health + '-', plevel + 1, '/-', plevel + 1)
+              // line2 = c
+              a.append( dice + die2 + health + '-', plevel + 1, '/-', plevel + 1, '\n' )
             }
             // bad - lose HP 
             else {
               // draw message, take HP
               php = php - (plevel + 1)
 
-              c = d.createElement('b')
-              c.append(dice + die2 + health + '-', plevel + 1)
-              line2 = c
+              // c = d.createElement('b')
+              // c.append(dice + die2 + health + '-', plevel + 1)
+              // line2 = c
+              a.append( dice + die2 + health + '-', plevel + 1, '\n' )
             }
           }
           // bad
@@ -477,47 +455,53 @@
             // max can lose is 3 * die2 * plevel
             // invert die2 so that if eg rogue, less likely to be 6x
             die2 = 7 - die2
-            tmpValue0 = 3 * die2 * ( plevel + 1 )
+            tmpValue0 = 3 * die2 * (plevel + 1)
             tmpValue0 = tmpValue0 > p$ ? p$ : tmpValue0
 
             p$ = p$ - tmpValue0
-            c = d.createElement('b')
-            c.append(unlucky + trap)
-            line1 = c
+            // c = d.createElement('b')
+            // c.append(unlucky + trap)
+            // line1 = c
+            a.append( unlucky + trap, '\n' )
 
-            c = d.createElement('b')
-            c.append(dice + die2 + $ + '-' + tmpValue0)
-            line2 = c
+            // c = d.createElement('b')
+            // c.append(dice + die2 + $ + '-' + tmpValue0)
+            // line2 = c
+            a.append( dice + die2 + $ + '-' + tmpValue0, '\n' )
           }
           // bad
           else if (die0 == 3) {
             // got stuck in spider web, lose HP
             // draw message, take HP
 
-            php = php - ( plevel + 1 )
+            php = php - (plevel + 1)
 
-            c = d.createElement('b')
-            c.append(unlucky + web)
-            line1 = c
+            // c = d.createElement('b')
+            // c.append(unlucky + web)
+            // line1 = c
+            a.append( unlucky + web, '\n' )
 
-            c = d.createElement('b')
-            c.append(health + '-' + plevel)
-            line2 = c
+            // c = d.createElement('b')
+            // c.append(health + '-' + plevel)
+            // line2 = c
+            a.append( health + '-' + plevel, '\n' )
           }
           // good
           else if (die0 == 4) {
             // fairy - get die2 HP, even over max
             // draw message, give HP
 
-            php = php + die2 * ( plevel + 1 )
+            php = php + die2 * (plevel + 1)
 
-            c = d.createElement('b')
-            c.append(lucky + fairy)
-            line1 = c
+            // c = d.createElement('b')
+            // c.append(lucky + fairy)
+            // line1 = c
+            a.append( lucky + fairy, '\n' )
 
-            c = d.createElement('b')
-            c.append(dice + die2 + health + '+' + die2)
-            line2 = c
+            // c = d.createElement('b')
+            // c.append(dice + die2 + health + '+' + die2)
+            // line2 = c
+            a.append( dice + die2 + health + '+' + die2, '\n' )
           }
           // good
           else if (die0 == 5) {
@@ -526,25 +510,28 @@
             tmpValue0 = (die2 * scaling[plevel + 1] / 10) | 0
             p$ = p$ + tmpValue0
 
-            c = d.createElement('b')
-            c.append(lucky + rainbow)
-            line1 = c
+            // c = d.createElement('b')
+            // c.append(lucky + rainbow)
+            // line1 = c
+            a.append( lucky + rainbow, '\n' )
 
-            c = d.createElement('b')
-            c.append(dice + die2 + $ + tmpValue0)
-            line2 = c
+            // c = d.createElement('b')
+            // c.append(dice + die2 + $ + tmpValue0)
+            // line2 = c
+            a.append( dice + die2 + $ + tmpValue0, '\n' )
           }
           // super good
           else if (die0 == 6) {
             tmpValue0 = (die2 * scaling[plevel + 1] / 10) | 0
 
-            c = d.createElement('b')
-            c.append(lucky + unicorn)
-            line1 = c
+            // c = d.createElement('b')
+            // c.append(lucky + unicorn)
+            // line1 = c
+            a.append( lucky + unicorn, '\n' )
 
             // unicorn - get lots of stuff
             // amazing - get some ATK, some MAX HP
-            c = d.createElement('b')
+            //c = d.createElement('b')
             if (die2 == 6) {
               // draw message, give ATK, give MAX HP
               patk = patk + 1
@@ -552,12 +539,23 @@
               // 10 * the money
               tmpValue0 = die2 * scaling[plevel + 1]
 
-              c.append(dice + die2 + ws + $ + tmpValue0 + ws + attack + '+1' + ws + health + '+2/+2' + ws + health + health)
+              a.append(
+                dice + die2 + ws + 
+                $ + tmpValue0 + ws + 
+                attack + '+1' + ws + 
+                health + '+2/+2' + ws + 
+                health + health,
+                '\n'
+              )
             }
             else {
-              c.append(dice + die2 + ws + $ + tmpValue0 + ws + health + health)
+              a.append(
+                dice + die2 + ws + 
+                $ + tmpValue0 + ws + 
+                health + health,
+                '\n'
+              )
             }
-            line2 = c
 
             p$ = p$ + tmpValue0
             php = phpmax
@@ -571,7 +569,7 @@
               tick()
             }
             cline.append(dead)
-            line6 = cline
+            a.append( cline, '\n' )
           }
           else {
             // back to forest - assume line6 is available
@@ -582,7 +580,7 @@
               tick()
             }
             cline.append(forest)
-            line6 = cline
+            a.append( cline, '\n' )
           }
         }
         else {
@@ -676,11 +674,13 @@
           fdmg = 2 + plevel
 
           // display monster
-          c = d.createElement('b')
-          c.append(fclass + ws + attack + fatk + ws + health + fhp)
-          line0 = c
+          // c = d.createElement('b')
+          // c.append(fclass + ws + attack + fatk + ws + health + fhp)
+          // line0 = c
+          a.append( fclass + ws + attack + fatk + ws + health + fhp, '\n' )
 
-          line1 = decision
+          //line1 = decision
+          a.append( decision, '\n')
 
           // attack
           cline = d.createElement('button')
@@ -689,7 +689,7 @@
             tick()
           }
           cline.append(attack)
-          line2 = cline
+          a.append( cline, '\n' )
 
           // can always run here - it's in attack that we check pclass
           // back to forest
@@ -700,7 +700,7 @@
             tick()
           }
           cline.append(forest)
-          line3 = cline
+          a.append( cline, '\n' )
         }
       }
       else if (plocation == attack) {
@@ -709,18 +709,20 @@
 
         if ((patk + die0) == (fatk + die1)) {
           // no hit      
-          c = d.createElement('b')
-          c.append(shield + shield)
-          line0 = c
+          // c = d.createElement('b')
+          // c.append(shield + shield)
+          // line0 = c
+          a.append( shield + shield, '\n' )
         }
         else if ((patk + die0) > (fatk + die1)) {
           // player hit monster
           tmpValue0 = 2 + pweapon // 2 at level 0      
           fhp = fhp - tmpValue0
 
-          c = d.createElement('b')
-          c.append(fclass + health + -tmpValue0)
-          line0 = c
+          // c = d.createElement('b')
+          // c.append(fclass + health + -tmpValue0)
+          // line0 = c
+          a.append( fclass + health + -tmpValue0, '\n' )
         }
         else {
           // monster hit    
@@ -728,34 +730,39 @@
 
           if (tmpValue0 <= 0) {
             // no hit      
-            c = d.createElement('b')
-            c.append(shield + shield)
-            line0 = c
+            // c = d.createElement('b')
+            // c.append(shield + shield)
+            // line0 = c
+            a.append( shield + shield, '\n' )
           }
           else {
             php = php - tmpValue0
 
-            c = d.createElement('b')
-            c.append(pclass + health + -tmpValue0)
-            line0 = c
+            // c = d.createElement('b')
+            // c.append(pclass + health + -tmpValue0)
+            // line0 = c
+            a.append( pclass + health + -tmpValue0, '\n' )
           }
         }
 
         // player
-        c = d.createElement('b')
-        c.append(dice + die0 + ws + pclass + ws + attack + patk + ws + health + php)
-        line1 = c
+        // c = d.createElement('b')
+        // c.append(dice + die0 + ws + pclass + ws + attack + patk + ws + health + php)
+        // line1 = c
+        a.append( dice + die0 + ws + pclass + ws + attack + patk + ws + health + php, '\n' )
 
         // display monster
-        c = d.createElement('b')
-        c.append(dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp)
-        line2 = c
+        // c = d.createElement('b')
+        // c.append(dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp)
+        // line2 = c
+        a.append( dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp, '\n' )
 
         if (php <= 0) {
           // player died
-          c = d.createElement('b')
-          c.append(pclass + dead)
-          line3 = c
+          // c = d.createElement('b')
+          // c.append(pclass + dead)
+          // line3 = c
+          a.append( pclass + dead, '\n' )
 
           // go to dead
           cline = d.createElement('button')
@@ -764,7 +771,7 @@
             tick()
           }
           cline.append(dead)
-          line4 = cline
+          a.append( cline, '\n' )
         }
         else if (fhp <= 0) {
           // give rewards
@@ -772,14 +779,16 @@
           pexp = pexp + fexp
 
           // enemy died
-          c = d.createElement('b')
-          c.append(fclass + dead)
-          line3 = c
+          // c = d.createElement('b')
+          // c.append(fclass + dead)
+          // line3 = c
+          a.append( fclass + dead, '\n' )
 
           // show rewards
-          c = d.createElement('b')
-          c.append($ + f$ + ws + level + fexp)
-          line4 = c
+          // c = d.createElement('b')
+          // c.append($ + f$ + ws + level + fexp)
+          // line4 = c
+          a.append( $ + f$ + ws + level + fexp, '\n' )
 
           if (fclass == dragon) {
             // exit to win
@@ -789,7 +798,7 @@
               tick()
             }
             cline.append(win)
-            line5 = cline
+            a.append( cline, '\n' )
           }
           else {
             // exit to forest
@@ -800,13 +809,14 @@
               tick()
             }
             cline.append(forest)
-            line5 = cline
+            a.append( cline, '\n' )
           }
         }
         else {
           // next round, or run if allowed
 
-          line4 = decision
+          //line4 = decision
+          a.append( decision, '\n')
 
           // attack
           cline = d.createElement('button')
@@ -815,7 +825,8 @@
             tick()
           }
           cline.append(attack)
-          line5 = cline
+          //line5 = cline
+          a.append( cline, '\n' )
 
           tmpLocked0 = pclass == fighter || pclass == magic && die2 < 4
           tmpValue0 = pclass == fighter ? nope + fighter : tmpLocked0 ? nope + magic + unlucky : pclass == magic ? magic : lucky
@@ -831,47 +842,16 @@
           // button label
           cline.append(forest)
           // suffix
-          c = d.createElement('b')
-          c.append(cline, tmpValue0)
-          line6 = c
+          a.append(cline, tmpValue0, '\n')
         }
       }
       else if (plocation == dead) {
-        a.append(dead + dead + dead)
+        a.append(dead + dead + dead, '\n')
         // no outbound links, sorry, game over!
       }
       else if (plocation == win) {
-        a.append(win + win + win)
+        a.append(win + win + win, '\n')
         // no outbound links, sorry, game over!        
-      }
-
-      // draw the lines - check if a an array and for loop is cheaper in regpack later      
-      if (line0) {
-        a.append(line0, '\n')
-      }
-      // next
-      if (line1) {
-        a.append(line1, '\n')
-      }
-      // next
-      if (line2) {
-        a.append(line2, '\n')
-      }
-      // next
-      if (line3) {
-        a.append(line3, '\n')
-      }
-      // next
-      if (line4) {
-        a.append(line4, '\n')
-      }
-      // next
-      if (line5) {
-        a.append(line5, '\n')
-      }
-      // next
-      if (line6) {
-        a.append(line6, '\n')
       }
 
       // last, draw stats
