@@ -33,8 +33,8 @@
     //const weapon = '🗡️'
     //const shield = '🛡️'
     const rogue = '🍀'
-    const fighter = '💪'
-    const magic = '🔮'
+    //const fighter = '💪'
+    //const magic = '🔮'
     // locations
     const castle = '🏰'
     //const shop = '🏪'
@@ -53,7 +53,7 @@
     const snake = '🐍'
     // level 2
     const clown = '🤡'
-    const goblin = '👺'
+    //const goblin = '👺'
     const spider = '🕷️'
     // level 3
     const wolf = '🐺'
@@ -195,9 +195,9 @@
 
         // choose fighter
         appendButton(
-          fighter,
+          attack,
           () => {
-            pclass = fighter
+            pclass = attack
             patk = patk + 1
 
             tick(castle)
@@ -206,9 +206,9 @@
 
         // choose magic
         appendButton(
-          magic,
+          health,
           () => {
-            pclass = magic
+            pclass = health
             php = php + 2
 
             tick(castle)
