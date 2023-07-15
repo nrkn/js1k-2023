@@ -167,23 +167,7 @@
       a = d.createElement('pre')
       b.append(a)
 
-      // debugging - show stats first - help to see if eg things go up and down
-      // c = d.createElement('pre')
-      // c.append(
-      //   pclass + ws +
-      //   $ + p$ + ws +
-      //   attack + patk + ws +
-      //   health + php + '/' + phpmax + ws +
-      //   weapon + pweapon + ws +
-      //   shield + pshield + ws,
-      //   level + plevel + '/' + pexp,
-      //   pexp >= scaling[plevel] ? up : '',
-      //   ws + time + pturns
-      // )
-      // a.append(c)
-      //
-      
-      a.append(plocation + ws + lucky + dragon + 1024, nl)
+      a.append(lucky + dragon + ws + plocation, nl)
 
       if (plocation == decision) {
         // init player
@@ -208,8 +192,7 @@
 
             plocation = castle
             tick()
-          },
-          dice + lucky
+          }
         )
 
         // choose fighter
@@ -221,8 +204,7 @@
 
             plocation = castle
             tick()
-          },
-          attack, patk + 1
+          }
         )
 
         // choose magic
@@ -234,8 +216,7 @@
 
             plocation = castle
             tick()
-          },
-          health, phpmax + 2
+          }
         )
       }
       // these are exclusive anyway so check if removing else is better for regpack later
@@ -247,7 +228,7 @@
         // weapon shop
         // can buy if not max and if have money
         appendButton(
-          weapon + '+' + (pweapon + 1),
+          weapon + (pweapon + 1),
           () => {
             if (!(pweapon == 5 || p$ < scaling[pweapon + 1])) {
               // begin custom shop action
@@ -260,17 +241,15 @@
               tick()
             }
           },
-          pweapon == 5 || p$ < scaling[pweapon + 1] ?
-            pweapon == 5 ?
-              nope + weapon :
-              nope + $ + scaling[pweapon + 1] :
+          (pweapon == 5 || p$ < scaling[pweapon + 1]) ?
+            nope + $ + scaling[pweapon + 1] :
             $ + scaling[pweapon + 1]
         )
 
         // shield shop
         // can buy if not max and if have money
         appendButton(
-          shield + '+' + (pshield + 1),
+          shield + (pshield + 1),
           () => {
             if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
               // begin custom shop action
@@ -293,7 +272,7 @@
 
         // healer        
         appendButton(
-          health + '+1',
+          health + 1,
           () => {
             if (!(p$ < 5 || php == phpmax)) {
               // begin custom shop action
@@ -305,14 +284,15 @@
               tick()
             }
           },
-          php == phpmax ? nope + health + health : p$ < 5 ? nope + $ + 5 : $ + 5
+          (p$ < 5 || php == phpmax) ? nope : $ + 5
         )
 
         // gym
+
         appendButton(
           level + (plevel + 1),
           () => {
-            if (!(plevel == 5) && !(pexp < scaling[plevel + 1])) {
+            if (!(plevel == 5 || pexp < scaling[plevel + 1])) {
               // begin custom shop action
               plevel = plevel + 1
               patk = patk + 1
@@ -323,8 +303,7 @@
               tick()
             }
           },
-          (plevel == 5) ? nope :
-            pexp < scaling[plevel + 1] ? nope + scaling[plevel + 1] : up + scaling[plevel + 1]
+          (plevel == 5 || pexp < scaling[plevel + 1]) ? nope + scaling[plevel + 1 ] : up
         )
 
         // forest
@@ -353,7 +332,7 @@
               tick()
             }
           },
-          plevel == 5 ? look : nope + level + 5
+          plevel == 5 ? look : nope
         )
 
 
@@ -364,28 +343,28 @@
         // if die0 == die1, random event
         // else, setup a battle and go to it
 
-        a.append(dice + die0 + dice + die1, nl)
 
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
-            a.append(unlucky + vampire, nl)
 
+            a.append(
+              die2 == 1 ?
+                unlucky + unlucky + vampire :
+                unlucky + vampire,
+              nl
+            )
 
             // terrible - lost MAX HP
             if (die2 == 1) {
               // draw message, take MAX HP and HP
               phpmax = phpmax - (plevel + 1)
               php = php - (plevel + 1)
-
-              a.append(dice + die2 + health + '-', plevel + 1, '/-', plevel + 1, nl)
             }
             // bad - lose HP 
             else {
               // draw message, take HP
               php = php - (plevel + 1)
-
-              a.append(dice + die2 + health + '-', plevel + 1, nl)
             }
           }
           // bad
@@ -401,7 +380,6 @@
             p$ = p$ - die0
 
             a.append(unlucky + trap, nl)
-            a.append(dice + die2 + $ + '-' + die0, nl)
           }
           // bad
           else if (die0 == 3) {
@@ -411,7 +389,6 @@
             php = php - (plevel + 1)
 
             a.append(unlucky + web, nl)
-            a.append(health + '-' + plevel, nl)
           }
           // good
           else if (die0 == 4) {
@@ -421,7 +398,6 @@
             php = php + die2 * (plevel + 1)
 
             a.append(lucky + fairy, nl)
-            a.append(dice + die2 + health + '+' + die2, nl)
           }
           // good
           else if (die0 == 5) {
@@ -430,14 +406,17 @@
             p$ = p$ + ((die2 * scaling[plevel + 1] / 10) | 0)
 
             a.append(lucky + rainbow, nl)
-            a.append(dice + die2 + $ + (die2 * scaling[plevel + 1] / 10) | 0, nl)
           }
           // super good
           else if (die0 == 6) {
-            // reuse die0
-            die0 = (die2 * scaling[plevel + 1] / 10) | 0
+            p$ = p$ + (die2 * scaling[plevel + 1] / 10) | 0
 
-            a.append(lucky + unicorn, nl)
+            a.append(
+              die2 == 6 ?
+              lucky + lucky + unicorn :
+              lucky + unicorn,
+              nl
+            )
 
             // unicorn - get lots of stuff
             // amazing - get some ATK, some MAX HP
@@ -446,37 +425,19 @@
               patk = patk + 1
               phpmax = phpmax + 2
               // 10 * the money
-              die0 = die2 * scaling[plevel + 1]
-
-              a.append(
-                dice + die2 + ws +
-                $ + die0 + ws +
-                attack + '+1' + ws +
-                health + '+2/+2' + ws +
-                health + health,
-                nl
-              )
-            }
-            else {
-              a.append(
-                dice + die2 + ws +
-                $ + die0 + ws +
-                health + health,
-                nl
-              )
+              p$ = p$ + die2 * scaling[plevel + 1]
             }
 
-            p$ = p$ + die0
             php = phpmax
           }
 
           // handle if the event killed player
           if (php <= 0) {
-            appendButton( dead )
+            appendButton(dead)
           }
           else {
             // back to forest
-            appendButton( forest )
+            appendButton(forest)
           }
         }
         else {
@@ -581,9 +542,9 @@
 
           // can always run here - it's in attack that we check pclass
           // back to forest
-          appendButton( forest, () => {
+          appendButton(forest, () => {
             fclass = 0
-            
+
             plocation = forest
             tick()
           })
@@ -595,7 +556,7 @@
 
         if ((patk + die0) == (fatk + die1)) {
           // no hit      
-          a.append(shield + shield, nl)
+          a.append(shield, nl)
         }
         else if ((patk + die0) > (fatk + die1)) {
           // player hit monster          
@@ -607,7 +568,7 @@
           // monster hit    
           if ((fdmg - pshield) <= 0) {
             // no hit      
-            a.append(shield + shield, nl)
+            a.append(shield, nl)
           }
           else {
             php = php - (fdmg - pshield)
@@ -616,17 +577,12 @@
           }
         }
 
-        // player
-        a.append(dice + die0 + ws + pclass + ws + attack + patk + ws + health + php, nl)
-
         // display monster
-        a.append(dice + die1 + ws + fclass + ws + attack + fatk + ws + health + fhp, nl)
+        a.append( fclass + ws + attack + fatk + ws + health + fhp, nl)
 
         if (php <= 0) {
-          // player died
-          a.append(pclass + dead, nl)
           // go to dead
-          appendButton( dead )
+          appendButton(dead)
         }
         else if (fhp <= 0) {
           // give rewards
@@ -645,7 +601,7 @@
           }
           else {
             // exit to forest
-            appendButton( forest, () => {
+            appendButton(forest, () => {
               fclass = 0
               plocation = forest
               tick()
@@ -670,16 +626,16 @@
                 tick()
               }
             },
-            pclass == fighter ? nope + fighter : pclass == magic && die2 < 4 ? nope + magic + unlucky : pclass == magic ? magic : lucky
+            (pclass == fighter || (pclass == magic && die2 < 4) ) ? nope : pclass == magic ? magic : lucky
           )
         }
       }
       else if (plocation == dead) {
-        a.append(dead + dead + dead, nl)
+        a.append(dead, nl)
         // no outbound links, sorry, game over!
       }
       else if (plocation == win) {
-        a.append(win + win + win, nl)
+        a.append(win, nl)
         // no outbound links, sorry, game over!        
       }
 
@@ -691,11 +647,10 @@
         pclass + ws +
         $ + p$ + ws +
         attack + patk + ws +
-        health + php + '/' + phpmax + ws +
+        health + php + ws + phpmax + ws +
         weapon + pweapon + ws +
-        shield + pshield + ws,
-        level + plevel + '/' + pexp,
-        pexp >= scaling[plevel + 1] ? up : '',
+        shield + pshield + ws +
+        level + plevel + ws + pexp,
         ws + time + pturns
       )
 
