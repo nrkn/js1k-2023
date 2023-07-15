@@ -141,9 +141,9 @@
     let fdmg
 
     // dice
-    let die0
-    let die1
-    let die2
+    // let die0
+    // let die1
+    // let die2
 
     const appendButton = (
       label = attack,
@@ -156,15 +156,15 @@
       a.append(c, nl)
     }
 
-    // next: if refreshing self, check if tick( plocation ) cheaper than literal
-
-    const tick = plocation => {
+    const tick = (
+      plocation,
+      die0 = ((Math.random() * 6) | 0) + 1,
+      die1 = ((Math.random() * 6) | 0) + 1,
+      die2 = ((Math.random() * 6) | 0) + 1
+    ) => {
       // rogues are luckier - they have a chance to reroll 1s
       // therefore, 1 or a low value should always be bad, and high values
       // should always be good
-      die0 = ((Math.random() * 6) | 0) + 1
-      die1 = ((Math.random() * 6) | 0) + 1
-      die2 = ((Math.random() * 6) | 0) + 1
       if (pclass === lucky && die0 == 1) die0 = ((Math.random() * 6) | 0) + 1
       // don't reroll the enemy dice in attacks, jebus! one expecption!
       if (pclass === lucky && die1 == 1) die1 = plocation == attack ? die1 : ((Math.random() * 6) | 0) + 1
@@ -439,90 +439,7 @@
           }
         }
         else {
-          // todo battle
-          /*
-            // level 1
-            const bat = '🦇'
-            const rat = '🐀'
-            const snake = '🐍'
-            // level 2
-            const clown = '🤡'
-            const goblin = '👺'
-            const spider = '🕷️'
-            // level 3
-            const wolf = '🐺'
-            const ghost = '👻'
-            const skeleton = '💀'
-            // level 4
-            const troll = '👹'
-            const devil = '😈'
-            const bear = '🐻'
-            // level 5
-            const zombie = '🧟'
-            const cyclops = '👁️'
-            const alien = '👾'          
-          */
-          // choose a monster based on plevel and dice  
-
           fclass = monsters[plevel * 3 + die0]
-
-          // if (plevel == 0 && die0 < 3) {
-          //   fclass = bat
-          // }
-          // else if (plevel == 0 && die0 < 5) {
-          //   fclass = rat
-          // }
-          // else if (plevel == 0) {
-          //   fclass = snake
-          // }
-          // else if (plevel == 1 && die0 < 3) {
-          //   fclass = clown
-          // }
-          // else if (plevel == 1 && die0 < 5) {
-          //   fclass = goblin
-          // }
-          // else if (plevel == 1) {
-          //   fclass = spider
-          // }
-          // else if (plevel == 2 && die0 < 3) {
-          //   fclass = wolf
-          // }
-          // else if (plevel == 2 && die0 < 5) {
-          //   fclass = ghost
-          // }
-          // else if (plevel == 2) {
-          //   fclass = skeleton
-          // }
-          // else if (plevel == 3 && die0 < 3) {
-          //   fclass = troll
-          // }
-          // else if (plevel == 3 && die0 < 5) {
-          //   fclass = devil
-          // }
-          // else if (plevel == 3) {
-          //   fclass = bear
-          // }
-          // else if (die0 < 3) {
-          //   fclass = zombie
-          // }
-          // else if (die0 < 5) {
-          //   fclass = cyclops
-          // }
-          // else {
-          //   fclass = alien
-          // }
-
-          /*
-            // reward $ and xp
-            let f$
-            let fexp
-            // monster atk
-            let fatk
-            // monster hp
-            let fhp
-            // monster dmg - for player it's plevel + 1 + pweapon, for monster just a num
-            let fdmg          
-          */
 
           // setup monster - we've used die0 and die1, leave die2 for mage run
           f$ = ((die0 + die1) * scaling[plevel + 1] / 100) | 0
@@ -534,7 +451,6 @@
           // display monster
           a.append(fclass + ws + attack + fatk + ws + health + fhp, nl)
 
-          //line1 = decision
           a.append(decision, nl)
 
           // attack
@@ -552,8 +468,6 @@
       }
       else if (plocation == attack) {
         // todo: calc and display result of this battle round
-
-
         if ((patk + die0) == (fatk + die1)) {
           // no hit      
           a.append(shield, nl)
@@ -649,10 +563,9 @@
         weapon + pweapon + ws +
         shield + pshield + ws +
         level + plevel + ws + pexp,
-        ws + time + pturns
+        ws + time,
+        pturns = pturns + 1
       )
-
-      pturns = pturns + 1
     }
     tick(decision)
   </script>
