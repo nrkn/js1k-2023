@@ -127,8 +127,6 @@
     let pexp
     let pturns
 
-    let plocation
-
     // forest encounter state
     // monster emoji
     let fclass
@@ -149,19 +147,18 @@
 
     const appendButton = (
       label = attack,
-      onclick = () => {
-        plocation = label
-        tick()
-      },
+      onclick = () => tick(label),
       suffix = ws
     ) => {
       c = d.createElement('button')
       c.onclick = onclick
-      c.append(label)
-      a.append(c, suffix, nl)
+      c.append(label, suffix)
+      a.append(c, nl)
     }
 
-    const tick = () => {
+    // next: if refreshing self, check if tick( plocation ) cheaper than literal
+
+    const tick = plocation => {
       // rogues are luckier - they have a chance to reroll 1s
       // therefore, 1 or a low value should always be bad, and high values
       // should always be good
@@ -199,8 +196,7 @@
           () => {
             pclass = rogue
 
-            plocation = castle
-            tick()
+            tick(castle)
           }
         )
 
@@ -211,8 +207,7 @@
             pclass = fighter
             patk = patk + 1
 
-            plocation = castle
-            tick()
+            tick(castle)
           }
         )
 
@@ -223,8 +218,7 @@
             pclass = magic
             php = phpmax = phpmax + 2
 
-            plocation = castle
-            tick()
+            tick(castle)
           }
         )
       }
@@ -246,8 +240,7 @@
               patk = patk + 1
               // end custom shop action
 
-              plocation = castle
-              tick()
+              tick(castle)
             }
           },
           (pweapon == 5 || p$ < scaling[pweapon + 1]) ?
@@ -268,8 +261,7 @@
               php = php + 2
               // end custom shop action
 
-              plocation = castle
-              tick()
+              tick(castle)
             }
           },
           pshield == 5 || p$ < scaling[pshield + 1] ?
@@ -289,8 +281,7 @@
               php = php + 1
               // end custom shop action
 
-              plocation = castle
-              tick()
+              tick(castle)
             }
           },
           (p$ < 5 || php == phpmax) ? nope : $ + 5
@@ -308,11 +299,10 @@
               php = phpmax = phpmax + 2
               // end custom shop action
 
-              plocation = castle
-              tick()
+              tick(castle)
             }
           },
-          (plevel == 5 || pexp < scaling[plevel + 1]) ? nope + scaling[plevel + 1 ] : up
+          (plevel == 5 || pexp < scaling[plevel + 1]) ? nope + scaling[plevel + 1] : up
         )
 
         // forest
@@ -337,8 +327,7 @@
               fhp = 50
               fdmg = 4 + plevel // 2 at level 0            
 
-              plocation = attack
-              tick()
+              tick(attack)
             }
           },
           plevel == 5 ? look : nope
@@ -422,8 +411,8 @@
 
             a.append(
               die2 == 6 ?
-              lucky + lucky + unicorn :
-              lucky + unicorn,
+                lucky + lucky + unicorn :
+                lucky + unicorn,
               nl
             )
 
@@ -475,7 +464,7 @@
           */
           // choose a monster based on plevel and dice  
 
-          fclass = monsters[ plevel * 3 + die0 ]
+          fclass = monsters[plevel * 3 + die0]
 
           // if (plevel == 0 && die0 < 3) {
           //   fclass = bat
@@ -557,8 +546,7 @@
           appendButton(forest, () => {
             fclass = 0
 
-            plocation = forest
-            tick()
+            tick(forest)
           })
         }
       }
@@ -590,7 +578,7 @@
         }
 
         // display monster
-        a.append( fclass + ws + attack + fatk + ws + health + fhp, nl)
+        a.append(fclass + ws + attack + fatk + ws + health + fhp, nl)
 
         if (php <= 0) {
           // go to dead
@@ -615,8 +603,7 @@
             // exit to forest
             appendButton(forest, () => {
               fclass = 0
-              plocation = forest
-              tick()
+              tick(forest)
             })
           }
         }
@@ -634,11 +621,10 @@
             () => {
               if (!(pclass == fighter || (pclass == magic && die2 < 4))) {
                 fclass = 0
-                plocation = forest
-                tick()
+                tick(forest)
               }
             },
-            (pclass == fighter || (pclass == magic && die2 < 4) ) ? nope : ws
+            (pclass == fighter || (pclass == magic && die2 < 4)) ? nope : ws
           )
         }
       }
@@ -668,8 +654,7 @@
 
       pturns = pturns + 1
     }
-    plocation = decision
-    tick()
+    tick(decision)
   </script>
 </body>
 
