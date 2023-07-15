@@ -222,7 +222,7 @@
         )
       }
       // these are exclusive anyway so check if removing else is better for regpack later
-      else if (plocation == castle) {
+      if (plocation == castle) {
         // do castle stuff 
 
         a.append(decision, nl)
@@ -309,7 +309,7 @@
         // first use of short form, check if smaller to never use short form
         appendButton(forest)
       }
-      else if (plocation == forest) {
+      if (plocation == forest) {
         a.append(decision, nl)
 
         // explore
@@ -338,7 +338,7 @@
         // back to castle
         appendButton(castle)
       }
-      else if (plocation == look) {
+      if (plocation == look) {
         // if die0 == die1, random event
         // else, setup a battle and go to it
 
@@ -346,23 +346,15 @@
         if (die0 == die1) {
           // super bad - vampire
           if (die0 == 1) {
+            // terrible - lost MAX HP
+            phpmax = phpmax - ( die2 == 1 ? (plevel + 1) : 0 )
+            // bad - lose HP 
+            php = php - (plevel + 1)
 
             a.append(unlucky + vampire, nl)
-
-            // terrible - lost MAX HP
-            if (die2 == 1) {
-              // draw message, take MAX HP and HP
-              phpmax = phpmax - (plevel + 1)
-              php = php - (plevel + 1)
-            }
-            // bad - lose HP 
-            else {
-              // draw message, take HP
-              php = php - (plevel + 1)
-            }
           }
           // bad
-          else if (die0 == 2) {
+          if (die0 == 2) {
             // money fell down hole, lose some $
             // max can lose is 3 * die2 * plevel
             // invert die2 so that if eg rogue, less likely to be 6x
@@ -375,7 +367,7 @@
             a.append(unlucky + trap, nl)
           }
           // bad
-          else if (die0 == 3) {
+          if (die0 == 3) {
             // got stuck in spider web, lose HP
             // draw message, take HP
             php = php - (plevel + 1)
@@ -383,7 +375,7 @@
             a.append(unlucky + web, nl)
           }
           // good
-          else if (die0 == 4) {
+          if (die0 == 4) {
             // fairy - get HP, even over max
             // draw message, give HP
 
@@ -392,7 +384,7 @@
             a.append(lucky + fairy, nl)
           }
           // good
-          else if (die0 == 5) {
+          if (die0 == 5) {
             // rainbow = get some $
             // draw message, give $, link back to forest
             p$ = p$ + ((die2 * scaling[plevel + 1] / 10) | 0)
@@ -400,13 +392,8 @@
             a.append(lucky + rainbow, nl)
           }
           // super good
-          else if (die0 == 6) {
+          if (die0 == 6) {
             p$ = p$ + (die2 * scaling[plevel + 1] / 10) | 0
-
-            a.append(
-              lucky + unicorn,
-              nl
-            )
 
             // unicorn - get lots of stuff
             // amazing - get some ATK, some MAX HP
@@ -419,18 +406,18 @@
             }
 
             php = phpmax
+
+            a.append(
+              lucky + unicorn,
+              nl
+            )
           }
 
           // handle if the event killed player
-          if (php <= 0) {
-            appendButton(dead)
-          }
-          else {
-            // back to forest
-            appendButton(forest)
-          }
+          appendButton(php <= 0 ? dead : forest )
         }
         else {
+          // create monster
           fclass = monsters[plevel * 3 + die0]
 
           // setup monster - we've used die0 and die1, leave die2 for mage run
@@ -447,14 +434,14 @@
 
           // attack
           //appendButton( attack )
-          appendButton()//short form - see if less bytes
+          appendButton( attack )//short form - see if less bytes
 
           // can always run here - it's in attack that we check pclass
           // back to forest
           appendButton(forest)
         }
       }
-      else if (plocation == attack) {
+      if (plocation == attack) {
         // todo: calc and display result of this battle round
         if ((patk + die0) == (fatk + die1)) {
           // no hit      
@@ -504,26 +491,18 @@
 
           // attack
           //appendButton( attack )
-          appendButton()//short form - see if less bytes
+          appendButton( attack )//short form - see if less bytes
 
-          appendButton(
-            forest + (
-              // if not rogue 50%/50%
-              (pclass != rogue || die2 < 4) ? nope : pclass
-            ),
-            () => {
-              if (!(pclass != rogue || die2 < 4)) {                
-                tick(forest)
-              }
-            }
-          )
+          if( (pclass == rogue || die2 > 3 ) ){
+            appendButton( forest )
+          }
         }
       }
-      else if (plocation == dead) {
+      if (plocation == dead) {
         a.append(dead, nl)
         // no outbound links, sorry, game over!
       }
-      else if (plocation == win) {
+      if (plocation == win) {
         a.append(win, nl)
         // no outbound links, sorry, game over!        
       }
