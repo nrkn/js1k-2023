@@ -165,9 +165,12 @@
       // therefore, 1 or a low value should always be bad, and high values
       // should always be good
       if (pclass === lucky && die0 == 1) die0 = ((Math.random() * 6) | 0) + 1
+      
       // don't reroll the enemy dice in attacks, jebus! one expecption!
       // sorry, too spendy, die1 is never lucky lol
       // if (pclass === lucky && die1 == 1) die1 = plocation == attack ? die1 : ((Math.random() * 6) | 0) + 1
+      
+      // but we can boost die2
       if (pclass === lucky && die2 == 1) die2 = ((Math.random() * 6) | 0) + 1
 
       a.remove()
@@ -178,7 +181,7 @@
 
       if (plocation == decision) {
         // init player
-        p$ = 25
+        p$ = 10
         patk = 5
         php = phpmax = 10
         pweapon = 0
@@ -469,9 +472,6 @@
           // give rewards
           p$ = p$ + f$
           pexp = pexp + fexp
-
-          // enemy died
-          a.append( $ + f$ + level + fexp, nl)
 
           if (fclass == dragon) {
             // exit to win
