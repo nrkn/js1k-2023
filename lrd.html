@@ -141,7 +141,7 @@
     let tmpLocked0
 
     const appendButton = (
-      label,
+      label = attack,
       onclick = () => {
         plocation = label
         tick()
@@ -362,7 +362,7 @@
 
 
         // back to castle
-        appendButton(castle)//this is the default overload, check if smaller when omitted in next round of checking
+        appendButton(castle)
       }
       else if (plocation == look) {
         // if die0 == die1, random event
@@ -579,7 +579,8 @@
           a.append(decision, '\n')
 
           // attack
-          appendButton( attack )
+          //appendButton( attack )
+          appendButton()//short form - see if less bytes
 
           // can always run here - it's in attack that we check pclass
           // back to forest
@@ -663,7 +664,8 @@
           a.append(decision, '\n')
 
           // attack
-          appendButton( attack )
+          //appendButton( attack )
+          appendButton()//short form - see if less bytes
 
           tmpLocked0 = pclass == fighter || pclass == magic && die2 < 4
           tmpValue0 = pclass == fighter ? nope + fighter : tmpLocked0 ? nope + magic + unlucky : pclass == magic ? magic : lucky
