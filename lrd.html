@@ -78,8 +78,8 @@
     // concepts
     const health = '❤️'
     const attack = '⚔️'
-    //const dead = '☠️'
-    //const win = '🏆'
+    const dead = '☠️'
+    const win = '🏆'
     const look = '👀'
     //const visit = '💨'
     const nope = '🔒'
@@ -175,8 +175,7 @@
       a = d.createElement('pre')
       b.append(a)
 
-      a.append(lucky + dragon, nl)
-      a.append(plocation, nl)
+      a.append(lucky + dragon + ' ' + plocation, nl)
 
       if (plocation == nope) {
         // init player
@@ -323,9 +322,8 @@
             // money fell down hole, lose some $
             // max can lose is 3 * die2 * plevel
             // reuse die0
-            die0 = 3 * ( p$ / die2 )|0
+            p$ = ( p$ - ( 3 * die2 * plevel ) ) < 0 ? 0 : p$ - ( 3 * die2 * plevel )
 
-            p$ = p$ - die0
 
             a.append(unlucky + trap, nl)
           }
@@ -375,7 +373,7 @@
           }
 
           // handle if the event killed player
-          appendButton( php > 0 ? forest : unlucky )
+          appendButton( php > 0 ? forest : dead )
         }
         else {
           // create monster
@@ -423,7 +421,7 @@
 
         if (php <= 0) {
           // go to dead
-          appendButton(unlucky)
+          appendButton(dead)
         }
         else if (fhp <= 0) {
           // give rewards
@@ -432,7 +430,7 @@
 
           if (fclass == dragon) {
             // exit to win
-            appendButton(lucky)
+            appendButton(win)
           }
           else {
             // exit to forest
@@ -455,12 +453,12 @@
           }
         }
       }
-      if (plocation == unlucky) {
-        a.append(unlucky, nl)
+      if (plocation == dead) {
+        a.append(dead, nl)
         // no outbound links, sorry, game over!
       }
-      if (plocation == lucky) {
-        a.append(lucky, nl)
+      if (plocation == win) {
+        a.append(win, nl)
         // no outbound links, sorry, game over!        
       }
 
