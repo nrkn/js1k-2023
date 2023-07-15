@@ -136,10 +136,6 @@
     let die1
     let die2
 
-    // temp
-    let tmpValue0
-    let tmpLocked0
-
     const appendButton = (
       label = attack,
       onclick = () => {
@@ -312,11 +308,10 @@
         )
 
         // gym
-        tmpLocked0 = plevel == 5        
         appendButton(
           level + (plevel + 1),
           () => {
-            if (!tmpLocked0 && !(pexp < scaling[plevel + 1])) {
+            if (!(plevel == 5) && !(pexp < scaling[plevel + 1])) {
               // begin custom shop action
               plevel = plevel + 1
               patk = patk + 1
@@ -327,7 +322,7 @@
               tick()
             }
           },
-          tmpLocked0 ? nope :
+          (plevel == 5) ? nope :
             pexp < scaling[plevel + 1] ? nope + scaling[plevel + 1] : up + scaling[plevel + 1]
         )
 
@@ -398,13 +393,14 @@
             // max can lose is 3 * die2 * plevel
             // invert die2 so that if eg rogue, less likely to be 6x
             die2 = 7 - die2
-            tmpValue0 = 3 * die2 * (plevel + 1)
-            tmpValue0 = tmpValue0 > p$ ? p$ : tmpValue0
+            // reuse die0
+            die0 = 3 * die2 * (plevel + 1)
+            die0 = die0 > p$ ? p$ : die0
 
-            p$ = p$ - tmpValue0
+            p$ = p$ - die0
 
             a.append(unlucky + trap, '\n')
-            a.append(dice + die2 + $ + '-' + tmpValue0, '\n')
+            a.append(dice + die2 + $ + '-' + die0, '\n')
           }
           // bad
           else if (die0 == 3) {
@@ -430,15 +426,15 @@
           else if (die0 == 5) {
             // rainbow = get some $
             // draw message, give $, link back to forest
-            tmpValue0 = (die2 * scaling[plevel + 1] / 10) | 0
-            p$ = p$ + tmpValue0
+            p$ = p$ + ((die2 * scaling[plevel + 1] / 10) | 0)
 
             a.append(lucky + rainbow, '\n')
-            a.append(dice + die2 + $ + tmpValue0, '\n')
+            a.append(dice + die2 + $ + (die2 * scaling[plevel + 1] / 10) | 0, '\n')
           }
           // super good
           else if (die0 == 6) {
-            tmpValue0 = (die2 * scaling[plevel + 1] / 10) | 0
+            // reuse die0
+            die0 = (die2 * scaling[plevel + 1] / 10) | 0
 
             a.append(lucky + unicorn, '\n')
 
@@ -449,11 +445,11 @@
               patk = patk + 1
               phpmax = phpmax + 2
               // 10 * the money
-              tmpValue0 = die2 * scaling[plevel + 1]
+              die0 = die2 * scaling[plevel + 1]
 
               a.append(
                 dice + die2 + ws +
-                $ + tmpValue0 + ws +
+                $ + die0 + ws +
                 attack + '+1' + ws +
                 health + '+2/+2' + ws +
                 health + health,
@@ -463,13 +459,13 @@
             else {
               a.append(
                 dice + die2 + ws +
-                $ + tmpValue0 + ws +
+                $ + die0 + ws +
                 health + health,
                 '\n'
               )
             }
 
-            p$ = p$ + tmpValue0
+            p$ = p$ + die0
             php = phpmax
           }
 
@@ -601,24 +597,21 @@
           a.append(shield + shield, '\n')
         }
         else if ((patk + die0) > (fatk + die1)) {
-          // player hit monster
-          tmpValue0 = 2 + pweapon // 2 at level 0      
-          fhp = fhp - tmpValue0
+          // player hit monster          
+          fhp = fhp - (2 + pweapon)
 
-          a.append(fclass + health + -tmpValue0, '\n')
+          a.append(fclass + health + -(2 + pweapon), '\n')
         }
         else {
           // monster hit    
-          tmpValue0 = fdmg - pshield
-
-          if (tmpValue0 <= 0) {
+          if ((fdmg - pshield) <= 0) {
             // no hit      
             a.append(shield + shield, '\n')
           }
           else {
-            php = php - tmpValue0
+            php = php - (fdmg - pshield)
 
-            a.append(pclass + health + -tmpValue0, '\n')
+            a.append(pclass + health + -(fdmg - pshield), '\n')
           }
         }
 
@@ -667,19 +660,16 @@
           //appendButton( attack )
           appendButton()//short form - see if less bytes
 
-          tmpLocked0 = pclass == fighter || pclass == magic && die2 < 4
-          tmpValue0 = pclass == fighter ? nope + fighter : tmpLocked0 ? nope + magic + unlucky : pclass == magic ? magic : lucky
-
           appendButton(
             forest,
             () => {
-              if (!tmpLocked0) {
+              if (!(pclass == fighter || (pclass == magic && die2 < 4))) {
                 fclass = 0
                 plocation = forest
                 tick()
               }
             },
-            tmpValue0
+            pclass == fighter ? nope + fighter : pclass == magic && die2 < 4 ? nope + magic + unlucky : pclass == magic ? magic : lucky
           )
         }
       }
