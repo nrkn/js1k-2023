@@ -438,7 +438,7 @@
             // bad - lose HP 
             else {
               // draw message, take HP
-              php = php - plevel + 1
+              php = php - (plevel + 1)
 
               c = d.createElement('b')
               c.append(dice + die2 + health + '-', plevel + 1)
@@ -702,7 +702,7 @@
         }
         else {
           // monster hit    
-          tmpValue0 = fdmg - parmor
+          tmpValue0 = fdmg - pshield
 
           if (tmpValue0 <= 0) {
             // no hit      
