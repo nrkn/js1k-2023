@@ -27,3 +27,4 @@ the goal is:
 2175B 
 1966B from branch no-more-lines, merged into main
 1932B from minor in main (should have been done in no-more-lines)
+-1955B from cat-adjacent-appends - it's bigger - don't do it
