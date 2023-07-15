@@ -70,9 +70,9 @@
     // encounters, good luck
     const unicorn = '🦄'
     const fairy = '🧚'
-    const rainbow = '🌈'
+    //const rainbow = '🌈'
     // encounters, bad luck
-    const web = '🕸️'
+    //const web = '🕸️'
     const trap = '🕳️'
     const vampire = '🧛'
     // concepts
@@ -87,23 +87,30 @@
     //const place = '🗺️'
     const lucky = '🍀'
     const unlucky = '😭'
-    const time = '⏰'
+    //const time = '⏰'
     const level = '🎚️'
-    const up = '👆'
+    //const up = '👆'
     //const gym = '🏋️'
-    const dice = '🎲'
+    //const dice = '🎲'
     //    const ws = ' '
     const nl = '\n'
     //const sep = '/'
 
+    // const monsters = [
+    //   rat, rat, bat,
+    //   troll, clown, spider,
+    //   wolf, ghost, skeleton,
+    //   troll, devil, bear,
+    //   zombie, cyclops, alien,
+    //   troll, devil, bear,
+    //   zombie, cyclops, alien
+    // ]
+
     const monsters = [
-      rat, rat, snake,
-      troll, clown, spider,
-      wolf, ghost, skeleton,
-      troll, devil, bear,
-      zombie, cyclops, alien,
-      troll, devil, bear,
-      zombie, cyclops, alien
+      rat, snake, spider, 
+      ghost, troll, zombie,
+      rat, snake, spider, 
+      ghost, troll, zombie
     ]
 
     // shop prices, levels, etc - all use this for scaling - will need tweaking
@@ -372,7 +379,7 @@
         }
         else {
           // create monster
-          fclass = monsters[plevel * 3 + die0]
+          fclass = monsters[plevel + die0]
 
           // setup monster - we've used die0 and die1, leave die2 for mage run
           // complex - let's make it like the others
