@@ -175,10 +175,7 @@
       // a.append(c)
       //
 
-      c = d.createElement('pre')
-      c.append(plocation + ws + lucky + dragon + 1024)
-
-      a.append(c)
+      a.append(plocation + ws + lucky + dragon + 1024, '\n')
 
       if (plocation == decision) {
         // init player
@@ -858,8 +855,7 @@
       /*
       🍀 💰10 ⚔️7 ❤️18/18 🗡️0 🛡️0 🎚️1/0 🔒2/128 ⏰17
       */
-      c = d.createElement('pre')
-      c.append(
+      a.append(
         pclass + ws +
         $ + p$ + ws +
         attack + patk + ws +
@@ -872,8 +868,7 @@
         // simplify it
         //nope + pturns + '/' + scaling[plocation - 1] + ws +
         ws + time + pturns
-      )
-      a.append(c)
+      )      
 
       pturns = pturns + 1
     }
