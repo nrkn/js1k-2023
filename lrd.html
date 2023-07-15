@@ -37,14 +37,14 @@
     const magic = '🔮'
     // locations
     const castle = '🏰'
-    const shop = '🏪'
-    const healer = '🏥'
+    //const shop = '🏪'
+    //const healer = '🏥'
     const forest = '🌲'
     // boss
     const dragon = '🐉'
 
     // hang loose
-    const rad = '🤙'
+    //const rad = '🤙'
     // normal monsters
     //
     // level 1
@@ -81,19 +81,29 @@
     const dead = '☠️'
     const win = '🏆'
     const look = '👀'
-    const visit = '💨'
+    //const visit = '💨'
     const nope = '🔒'
     const decision = '🤔'
-    const place = '🗺️'
+    //const place = '🗺️'
     const lucky = '🍀'
     const unlucky = '😭'
     const time = '⏰'
     const level = '🎚️'
     const up = '👆'
-    const gym = '🏋️'
+    //const gym = '🏋️'
     const dice = '🎲'
     const ws = ' '
     const nl = '\n'
+
+    const monsters = [
+      bat, rat, snake,
+      clown, goblin, spider,
+      wolf, ghost, skeleton,
+      troll, devil, bear,
+      zombie, cyclops, alien,
+      troll, devil, bear,
+      zombie, cyclops, alien
+    ]
 
     // shop prices, levels, etc - all use this for scaling - will need tweaking
     const scaling = [0, 128, 512, 1024, 4096, 16384, 33768]
@@ -464,51 +474,54 @@
             const alien = '👾'          
           */
           // choose a monster based on plevel and dice  
-          if (plevel == 0 && die0 < 3) {
-            fclass = bat
-          }
-          else if (plevel == 0 && die0 < 5) {
-            fclass = rat
-          }
-          else if (plevel == 0) {
-            fclass = snake
-          }
-          else if (plevel == 1 && die0 < 3) {
-            fclass = clown
-          }
-          else if (plevel == 1 && die0 < 5) {
-            fclass = goblin
-          }
-          else if (plevel == 1) {
-            fclass = spider
-          }
-          else if (plevel == 2 && die0 < 3) {
-            fclass = wolf
-          }
-          else if (plevel == 2 && die0 < 5) {
-            fclass = ghost
-          }
-          else if (plevel == 2) {
-            fclass = skeleton
-          }
-          else if (plevel == 3 && die0 < 3) {
-            fclass = troll
-          }
-          else if (plevel == 3 && die0 < 5) {
-            fclass = devil
-          }
-          else if (plevel == 3) {
-            fclass = bear
-          }
-          else if (die0 < 3) {
-            fclass = zombie
-          }
-          else if (die0 < 5) {
-            fclass = cyclops
-          }
-          else {
-            fclass = alien
-          }
+
+          fclass = monsters[ plevel * 3 + die0 ]
+
+          // if (plevel == 0 && die0 < 3) {
+          //   fclass = bat
+          // }
+          // else if (plevel == 0 && die0 < 5) {
+          //   fclass = rat
+          // }
+          // else if (plevel == 0) {
+          //   fclass = snake
+          // }
+          // else if (plevel == 1 && die0 < 3) {
+          //   fclass = clown
+          // }
+          // else if (plevel == 1 && die0 < 5) {
+          //   fclass = goblin
+          // }
+          // else if (plevel == 1) {
+          //   fclass = spider
+          // }
+          // else if (plevel == 2 && die0 < 3) {
+          //   fclass = wolf
+          // }
+          // else if (plevel == 2 && die0 < 5) {
+          //   fclass = ghost
+          // }
+          // else if (plevel == 2) {
+          //   fclass = skeleton
+          // }
+          // else if (plevel == 3 && die0 < 3) {
+          //   fclass = troll
+          // }
+          // else if (plevel == 3 && die0 < 5) {
+          //   fclass = devil
+          // }
+          // else if (plevel == 3) {
+          //   fclass = bear
+          // }
+          // else if (die0 < 3) {
+          //   fclass = zombie
+          // }
+          // else if (die0 < 5) {
+          //   fclass = cyclops
+          // }
+          // else {
+          //   fclass = alien
+          // }
 
           /*
             // reward $ and xp

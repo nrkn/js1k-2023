@@ -36,3 +36,4 @@ the goal is:
 1880B from branch inline-temps revision
 1664B from branch brutal-display-rip
 1654B from minor in main
+1798B from branch no-state, worse, did not merge into main
