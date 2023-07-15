@@ -78,12 +78,12 @@
     // concepts
     const health = '❤️'
     const attack = '⚔️'
-    const dead = '☠️'
-    const win = '🏆'
+    //const dead = '☠️'
+    //const win = '🏆'
     const look = '👀'
     //const visit = '💨'
     const nope = '🔒'
-    const decision = '🤔'
+    //const decision = '🤔'
     //const place = '🗺️'
     const lucky = '🍀'
     const unlucky = '😭'
@@ -109,21 +109,12 @@
     // shop prices, levels, etc - all use this for scaling - will need tweaking
     const scaling = [0, 128, 512, 1024, 4096, 16384, 33768]
 
-    // player stats etc
-    /*
-    -=-=-
-    🔮 💰51 ⚔️9 ❤️12/19 🗡️1 🛡️1 🎚️2/11200 ☝️3/10000
-    -=-=-
-    pclass p$ patk php phpmax pweapon pshield plevel pexp
-    */
-
     let pclass
     let p$
     let patk
     let php
     let phpmax
     let pweapon
-//    let pshield
     let plevel
     let pexp
 
@@ -177,9 +168,10 @@
       a = d.createElement('pre')
       b.append(a)
 
-      a.append(lucky + dragon + sep + plocation, nl)
+      //a.append(lucky + dragon + sep + plocation, nl)
+      //a.append(plocation, nl)
 
-      if (plocation == decision) {
+      if (plocation == nope) {
         // init player
         p$ = 10
         patk = 5
@@ -189,7 +181,7 @@
         plevel = 0
         pexp = 0
 
-        a.append(decision, nl)
+        //a.append(decision, nl)
 
         // choose rogue
         appendButton(
@@ -227,7 +219,7 @@
       if (plocation == castle) {
         // do castle stuff 
 
-        a.append(decision, nl)
+        //a.append(decision, nl)
 
         // weapon shop
         // can buy if not max and if have money
@@ -236,10 +228,11 @@
             attack + $ + scaling[pweapon + 1],
             () => {
               p$ = p$ - scaling[pweapon + 1]
-              pweapon = pweapon + 1
+              
+              pweapon = pweapon + 1              
               patk = patk + 1
-              phpmax = phpmax + 2
-              php = php + 2              
+              php = phpmax = phpmax + 2            
+
               tick(castle)
             }
           )
@@ -269,6 +262,7 @@
               plevel = plevel + 1
               patk = patk + 1
               php = phpmax = phpmax + 2
+
               tick(castle)
             }
           )
@@ -281,7 +275,7 @@
         appendButton(forest)
       }
       if (plocation == forest) {
-        a.append(decision, nl)
+        //a.append(decision, nl)
 
         // explore
         appendButton(look)
@@ -292,8 +286,6 @@
             dragon,
             () => {
               fclass = dragon
-              f$ = scaling[plevel] * 2
-              fexp = scaling[plevel] * 2
               fatk = 14
               fhp = 50
               fdmg = 4 + plevel // 2 at level 0            
@@ -326,7 +318,6 @@
           if (die0 == 2) {
             // money fell down hole, lose some $
             // max can lose is 3 * die2 * plevel
-            // invert die2 so that if eg rogue, less likely to be 6x
             // reuse die0
             die0 = 3 * die2 * (plevel + 1)
             die0 = die0 > p$ ? p$ : die0
@@ -382,7 +373,7 @@
           }
 
           // handle if the event killed player
-          appendButton( php > 0 ? forest : dead )
+          appendButton( php > 0 ? forest : unlucky )
         }
         else {
           // create monster
@@ -398,7 +389,7 @@
           // display monster
           a.append(fclass + attack + fatk + health + fhp, nl)
 
-          a.append(decision, nl)
+          //a.append(decision, nl)
 
           // attack
           //appendButton( attack )
@@ -433,7 +424,7 @@
 
         if (php <= 0) {
           // go to dead
-          appendButton(dead)
+          appendButton(unlucky)
         }
         else if (fhp <= 0) {
           // give rewards
@@ -442,7 +433,7 @@
 
           if (fclass == dragon) {
             // exit to win
-            appendButton(win)
+            appendButton(lucky)
           }
           else {
             // exit to forest
@@ -452,7 +443,7 @@
         else {
           // next round, or run if allowed
 
-          a.append(decision, nl)
+          //a.append(decision, nl)
 
           // attack
           //appendButton( attack )
@@ -465,12 +456,12 @@
           }
         }
       }
-      if (plocation == dead) {
-        a.append(dead, nl)
+      if (plocation == unlucky) {
+        a.append(unlucky, nl)
         // no outbound links, sorry, game over!
       }
-      if (plocation == win) {
-        a.append(win, nl)
+      if (plocation == lucky) {
+        a.append(lucky, nl)
         // no outbound links, sorry, game over!        
       }
 
@@ -479,6 +470,7 @@
       🍀💰10⚔️7❤️18/18🎚️1/0
       */
       a.append(
+        plocation + 
         pclass +
         $ + p$ +
         attack + patk +
@@ -486,7 +478,7 @@
         level + plevel + sep + pexp
       )
     }
-    tick(pclass = decision)
+    tick(pclass = nope)
   </script>
 </body>
 
