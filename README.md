@@ -24,7 +24,6 @@ let's start making branches
 
 the goal is:
 
-2175B
-
-### branch 1 - get rid of lines etc, append directly ourselves
+2175B 
+1966B from branch no-more-lines, merged into main
 
