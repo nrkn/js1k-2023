@@ -15,7 +15,7 @@
 
     let a = d.createElement('canvas')
     let c = a.getContext('2d')
-
+    
     b.append(a)
 
     a.width = innerWidth
@@ -31,7 +31,7 @@
     // stat related
     const $ = '💰'
     //const weapon = '🗡️'
-    const shield = '🛡️'
+    //const shield = '🛡️'
     const rogue = '🍀'
     const fighter = '💪'
     const magic = '🔮'
@@ -123,7 +123,7 @@
     let php
     let phpmax
     let pweapon
-    let pshield
+//    let pshield
     let plevel
     let pexp
 
@@ -146,7 +146,7 @@
     // let die2
 
     const appendButton = (
-      label = attack,
+      label = forest,
       onclick = () => tick(label)
     ) => {
       c = d.createElement('button')
@@ -185,7 +185,7 @@
         patk = 5
         php = phpmax = 10
         pweapon = 0
-        pshield = 0
+//        pshield = 0
         plevel = 0
         pexp = 0
 
@@ -238,23 +238,8 @@
               p$ = p$ - scaling[pweapon + 1]
               pweapon = pweapon + 1
               patk = patk + 1
-              tick(castle)
-            }
-          )
-        } else {
-          a.append(nope, nl)
-        }
-
-        // shield shop
-        // can buy if not max and if have money
-        if (!(pshield == 5 || p$ < scaling[pshield + 1])) {
-          appendButton(
-            shield + $ + scaling[pshield + 1],
-            () => {
-              p$ = p$ - scaling[pshield + 1]
-              pshield = pshield + 1
               phpmax = phpmax + 2
-              php = php + 2
+              php = php + 2              
               tick(castle)
             }
           )
@@ -397,7 +382,7 @@
           }
 
           // handle if the event killed player
-          appendButton(php <= 0 ? dead : forest)
+          appendButton( php > 0 ? forest : dead )
         }
         else {
           // create monster
