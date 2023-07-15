@@ -451,11 +451,7 @@
 
           // can always run here - it's in attack that we check pclass
           // back to forest
-          appendButton(forest, () => {
-            fclass = 0
-
-            tick(forest)
-          })
+          appendButton(forest)
         }
       }
       else if (plocation == attack) {
@@ -498,10 +494,7 @@
           }
           else {
             // exit to forest
-            appendButton(forest, () => {
-              fclass = 0
-              tick(forest)
-            })
+            appendButton(forest)
           }
         }
         else {
@@ -519,8 +512,7 @@
               (pclass != rogue || die2 < 4) ? nope : pclass
             ),
             () => {
-              if (!(pclass != rogue || die2 < 4)) {
-                fclass = 0
+              if (!(pclass != rogue || die2 < 4)) {                
                 tick(forest)
               }
             }
